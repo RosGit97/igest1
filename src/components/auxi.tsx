@@ -11,6 +11,9 @@ import Despesas from "./Despesas";
 import Poupancas from "./Poupancas";
 import Cadastro from "./Cadrastro";
 import Login from "./Login";
+import AddGasto from "./AddGasto";
+import VGrafico from "./VGrafico";
+import AddRendimentos from "./AddRendimentos";
 
 export default function Auxi( ) {
 
@@ -47,6 +50,21 @@ export default function Auxi( ) {
                 <Stack.Screen
                     name="Login"
                     component={Login}
+                    options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                    name="AddGasto"
+                    component={AddGasto}
+                    options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                    name="VGrafico"
+                    component={VGrafico}
+                    options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                    name="AddRendimentos"
+                    component={AddRendimentos}
                     options={{ headerShown: false }}
                 />
             </Stack.Navigator>

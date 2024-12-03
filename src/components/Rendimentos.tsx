@@ -3,10 +3,12 @@ import React from "react";
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, ImageBackground } from 'react-native';
 import { useFonts, Frijole_400Regular } from '@expo-google-fonts/frijole';
 import { Fruktur_400Regular } from '@expo-google-fonts/fruktur';
-
-
+import { useNavigation } from "@react-navigation/native";
+import { createStackNavigator } from '@react-navigation/stack';
+import { propsStack } from ".";
+const Stack = createStackNavigator();
 export default function Rendimentos() {
-
+    const navigation = useNavigation<propsStack>();
     const add = require("../../assets/icons/add.png");
     const fundo = require("../../assets/icons/fundo1.jpg");
 
@@ -106,7 +108,7 @@ export default function Rendimentos() {
 
 
                 </View>
-                <View style={{
+                {/* <View style={{
                     flex: 1,
 
                     height: '20%',
@@ -116,9 +118,28 @@ export default function Rendimentos() {
                 }}>
                     <ImageBackground source={add} resizeMode='cover' style={{ width: 60, height: 60 }} />
 
+                </View> */}
+
+                <View style={{
+                    flex: 1,
+
+                    height: '20%',
+                    width: '100%',
+                    alignItems: 'flex-end',
+
+                }}><TouchableOpacity
+
+                    onPress={() => navigation.navigate('AddRendimentos')}
+
+                >
+                        <ImageBackground source={add} resizeMode='cover' style={{ width: 60, height: 60 }} />
+
+                    </TouchableOpacity>
+
+
                 </View>
             </View>
-            
+
 
         </View>
     );

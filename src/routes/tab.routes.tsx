@@ -106,7 +106,7 @@ export default function TabRoutes() {
                 }}
             />
             <Tab.Screen
-                name="Login"
+                name="login"
                 component={Auxi}
                 options={{
                     tabBarActiveTintColor: '#C0C0C0',
