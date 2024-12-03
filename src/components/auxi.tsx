@@ -5,15 +5,19 @@ import { useFonts, Frijole_400Regular } from '@expo-google-fonts/frijole';
 import { NavigationContainer } from "@react-navigation/native";
 import 'react-native-gesture-handler';
 import { createStackNavigator } from '@react-navigation/stack';
+import { RootStackParamList } from './types';
 import Rendimentos from "./Rendimentos";
 import Menu from "./Menu";
 import Despesas from "./Despesas";
 import Poupancas from "./Poupancas";
-import Cadastro from "./Cadrastro";
+import Cadastro from "./Cadastro";
+import Cadastro1 from "./Cadastro1";
 import Login from "./Login";
 import AddGasto from "./AddGasto";
 import VGrafico from "./VGrafico";
 import AddRendimentos from "./AddRendimentos";
+import AddPoupanca from "./AddPoupanca";
+import CadastroFamilia from "./CadastroFamilia";
 
 export default function Auxi( ) {
 
@@ -26,7 +30,7 @@ export default function Auxi( ) {
                     name="Home"
                     component={Menu}
                     options={{ headerShown: false }}
-                />
+                /> 
                 <Stack.Screen
                     name="Rendimentos"
                     component={Rendimentos}
@@ -40,6 +44,16 @@ export default function Auxi( ) {
                 <Stack.Screen
                     name="Poupancas"
                     component={Poupancas}
+                    options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                    name="CadastroFamilia"
+                    component={CadastroFamilia}
+                    options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                    name="Cadastro1"
+                    component={Cadastro1}
                     options={{ headerShown: false }}
                 />
                 <Stack.Screen
@@ -65,6 +79,11 @@ export default function Auxi( ) {
                 <Stack.Screen
                     name="AddRendimentos"
                     component={AddRendimentos}
+                    options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                    name="AddPoupanca"
+                    component={AddPoupanca}
                     options={{ headerShown: false }}
                 />
             </Stack.Navigator>

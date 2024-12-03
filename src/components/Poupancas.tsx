@@ -1,16 +1,47 @@
 
-import React from "react";
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, ImageBackground } from 'react-native';
+import React, { useEffect, useState } from "react";
+import { StyleSheet, Text, View, TextInput, FlatList, TouchableOpacity, ImageBackground } from 'react-native';
 import { useFonts, Frijole_400Regular } from '@expo-google-fonts/frijole';
 import { Fruktur_400Regular } from '@expo-google-fonts/fruktur';
+import { useNavigation, RouteProp, useRoute } from "@react-navigation/native";
+import { createStackNavigator } from '@react-navigation/stack';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from "./types";
+import { propsStack } from ".";
 
-
+const Stack = createStackNavigator();
+type AddPoupancasScreenRouteProp = RouteProp<RootStackParamList, 'Poupancas'>;
+type AddPoupancasScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Poupancas'>;
+interface DadosBD {
+    id: number;
+    objectivo: string;
+    valorActual: string;
+}
 export default function Poupancas() {
-
+    const navigation = useNavigation<AddPoupancasScreenNavigationProp>();
     const add = require("../../assets/icons/add.png");
     const fundo = require("../../assets/icons/fundo1.jpg");
-
+    const [dadosBD, setDadosBD] = useState<DadosBD[]>([]);
+    const route = useRoute<AddPoupancasScreenRouteProp>();
+    const userName = route.params.userName;
+    const id = route.params.id;
     const [fontLoaded] = useFonts({ Frijole_400Regular, Fruktur_400Regular });
+
+
+    useEffect(() => {
+        // Função para buscar os dados da API
+        const fetchData = async () => {
+            try {
+                const response = await fetch('http://192.168.100.9:3001/getPoupancas');
+                const json = await response.json();
+                setDadosBD(json);
+            } catch (error) {
+                console.error('Erro ao buscar dados:', error);
+            }
+        };
+
+        fetchData();
+    }, []);
 
     if (!fontLoaded) {
         return null;
@@ -21,7 +52,10 @@ export default function Poupancas() {
     // if (!fontLoaded2) {
     //     return null;
     // }
-
+    const handlePress = (item: DadosBD) => {
+        console.log('Item pressionado:', item);
+        // Aqui você pode adicionar a lógica para o que deve acontecer ao clicar no item
+    };
 
     return (
         <View style={styles.container}>
@@ -51,72 +85,41 @@ export default function Poupancas() {
                     width: '100%',
                     maxHeight: '80%',
                     minHeight: '80%',
-
-
                 }}>
-                    <View style={styles.viewValor}>
-                        <Text style={styles.textValor}>500.000,00 AKZ</Text>
-                        <Text style={styles.textValor}>dd/mm/AAAA</Text>
-                    </View>
+                    <FlatList
+                        data={dadosBD}
+                        keyExtractor={(item) => item.id.toString()}
+                        renderItem={({ item }) => (
 
-                    <View style={styles.viewValor}>
-                        <Text style={styles.textValor}>500.000,00 AKZ</Text>
-                        <Text style={styles.textValor}>dd/mm/AAAA</Text>
-                    </View>
+                            <View style={styles.viewValor}>
+                                <TouchableOpacity style={styles.viewValor} onPress={() => handlePress(item)}>
+                                    <Text style={styles.textValor}>{item.objectivo}</Text>
+                                    <Text style={styles.textValor}>{item.valorActual}</Text>
+                                </TouchableOpacity>
+                            </View>
 
-                    <View style={styles.viewValor}>
-                        <Text style={styles.textValor}>500.000,00 AKZ</Text>
-                        <Text style={styles.textValor}>dd/mm/AAAA</Text>
-                    </View>
-
-                    <View style={styles.viewValor}>
-                        <Text style={styles.textValor}>500.000,00 AKZ</Text>
-                        <Text style={styles.textValor}>dd/mm/AAAA</Text>
-                    </View>
-
-                    <View style={styles.viewValor}>
-                        <Text style={styles.textValor}>500.000,00 AKZ</Text>
-                        <Text style={styles.textValor}>dd/mm/AAAA</Text>
-                    </View>
-
-                    <View style={styles.viewValor}>
-                        <Text style={styles.textValor}>500.000,00 AKZ</Text>
-                        <Text style={styles.textValor}>dd/mm/AAAA</Text>
-                    </View>
-
-                    <View style={styles.viewValor}>
-                        <Text style={styles.textValor}>500.000,00 AKZ</Text>
-                        <Text style={styles.textValor}>dd/mm/AAAA</Text>
-                    </View>
-
-                    <View style={styles.viewValor}>
-                        <Text style={styles.textValor}>500.000,00 AKZ</Text>
-                        <Text style={styles.textValor}>dd/mm/AAAA</Text>
-                    </View>
-
-                    <View style={styles.viewValor}>
-                        <Text style={styles.textValor}>500.000,00 AKZ</Text>
-                        <Text style={styles.textValor}>dd/mm/AAAA</Text>
-                    </View>
-
-                    <View style={styles.viewValor}>
-                        <Text style={styles.textValor}>500.000,00 AKZ</Text>
-                        <Text style={styles.textValor}>dd/mm/AAAA</Text>
-                    </View>
-
+                        )}
+                    />
                 </View>
                 <View style={{
-                    flex: 1,
-                    height: '20%',
-                    width: '100%',
-                    alignItems: 'flex-end',
+                    height: 'auto',
+                    width: 'auto',
+                    alignSelf: 'flex-end',
+                    marginEnd: 5,
 
-                }}>
-                    <ImageBackground source={add} resizeMode='cover' style={{ width: 60, height: 60 }} />
+                }}><TouchableOpacity
+
+                    onPress={() => navigation.navigate('AddPoupanca', { userName: userName, id: id })}
+
+                >
+                        <ImageBackground source={add} resizeMode='cover' style={{ width: 60, height: 60 }} />
+
+                    </TouchableOpacity>
+
 
                 </View>
             </View>
-        
+
         </View>
     );
 }

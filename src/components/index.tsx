@@ -12,6 +12,7 @@ export type propsNavigationStack = {
     Login: undefined
     AddGasto: undefined
     AddRendimentos:undefined
+    AddPoupanca:undefined
 }
 
 export type propsStack = NativeStackNavigationProp<propsNavigationStack>

@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, ImageBackground, Pressable, Platform } from 'react-native';
 import { useNavigation, RouteProp, useRoute } from "@react-navigation/native";
@@ -12,21 +11,24 @@ import DateTimePicker from "@react-native-community/datetimepicker"
 import { TextInputMask } from 'react-native-masked-text';
 
 const Stack = createStackNavigator();
-type AddGastoScreenRouteProp = RouteProp<RootStackParamList, 'AddGasto'>;
-type AddGastoScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'AddGasto'>;
+type AddPoupancaScreenRouteProp = RouteProp<RootStackParamList, 'AddPoupanca'>;
+type AddPoupancaScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'AddPoupanca'>;
 
-export default function AddGasto() {
-  const navigation = useNavigation<AddGastoScreenNavigationProp>();
+export default function AddPoupanca() {
+  const navigation = useNavigation<AddPoupancaScreenNavigationProp>();
 
   const fundo = require("../../assets/icons/fundo1.jpg");
 
   const [values, setValues] = useState();
   var use = null;
-  const [categoria, setCategoria] = useState("");
-  const [nomeGasto, setNomeGasto] = useState("");
-  const [valorGasto, setValorGasto] = useState("");
-  const [valorGastoReal, setValorGastoReal] = useState(0);
-  const [dataGasto, setDataGasto] = useState("");
+  const [objectivo, setObjectivo] = useState("");
+  const [tempoPoupanca, setTempoPoupanca] = useState("");
+  const [valorPrevisto, setValorPrevisto] = useState("");
+  const [valorMensal, setValorMensal] = useState("");
+  const [valorMensalReal, setValorMensalReal] = useState(0);
+  const [valorPrevistoReal, setValorPrevistoReal] = useState(0);
+  const [dataPoupanca, setDataPoupanca] = useState("");
+
   const [tipoGasto, setTipoGasto] = useState("");
 
   const [date, setDate] = useState(new Date());
@@ -37,10 +39,9 @@ export default function AddGasto() {
   const ano = date.getFullYear(); // Obtem o ano com quatro dígitos
   const [successMessage, setSuccessMessage] = useState('');
 
-  const route = useRoute<AddGastoScreenRouteProp>();
+  const route = useRoute<AddPoupancaScreenRouteProp>();
   const userName = route.params.userName;
   const id = route.params.id;
-
   const toggleDatePicker = () => {
     setShowPicker(!showPicker)
 
@@ -61,30 +62,26 @@ export default function AddGasto() {
     const currentDate = selectedDate || date;
     setDate(currentDate);
     toggleDatePicker();
-    console.log(dataGasto)
-
+    console.log(date.toDateString())
   }
   const handleClickButton = () => {
-    console.log("valor" + valorGasto.replace("R$", "").replace(".", "").replace(",", "."));
-    // const valorSemMoeda = valorGasto.replace(/[^\d,.-]/g, ''); // Remove símbolos de moeda e pontos de milhar, preservando vírgulas e números
-    // console.log(valorGasto);
     const dados = {
       // Seus dados para enviar no corpo da requisição POST
-      categoria: categoria,
-      nomeGasto: nomeGasto,
-      valorGasto: valorGasto.replace("R$", "").replace(".", "").replace(",", "."),
-      dataGasto: "19/10/2024",
-      // dia+"/"+mes+"/"+ano,
-      tipo_gasto: tipoGasto,
+      objectivo: objectivo,
+      tempoPoupanca: tempoPoupanca,
+      valorPrevisto: valorPrevisto.replace("R$", ""),
+      valorMensal: valorMensal.replace("R$", ""),
+      dataPoupanca: dia + "/" + mes + "/" + ano,
       idUsuario: id,
+
+      tipo_gasto: tipoGasto,
     };
-    Axios.post("http://192.168.100.9:3001/registoGasto", dados)
+    Axios.post("http://192.168.100.9:3001/registoPoupanca", dados)
       .then(response => {
         // Aqui dentro do bloco then, você tem acesso aos dados retornados pela requisição
         console.log('Dados enviados com sucesso:', response.data);
         setSuccessMessage('Inserção de dados feita com sucesso!');
-        // alert('Inserção de dados feita com sucesso!')
-       
+        alert('Inserção de dados feita com sucesso!')
       }).catch(error => {
         // Se houver algum erro na requisição, você pode tratá-lo aqui
         console.error('Erro ao fazer requisição:', error);
@@ -108,52 +105,48 @@ export default function AddGasto() {
           opacity: 0.2,
           position: 'absolute',
         }} />
-      <Text style={styles.text}>Registo de despesa</Text>
+      <Text style={styles.text}>Plano de poupança</Text>
 
       <TextInput
-        placeholder="categoria"
+        placeholder="Qual o seu objectivo"
         style={styles.textInput}
-        onChangeText={(text) => setCategoria(text)}
+        onChangeText={(text) => setObjectivo(text)}
       ></TextInput>
       <TextInput
-        placeholder="o que comprou?"
+        placeholder="Em quanto tempo pretende alcançar esse objectivo?"
         style={styles.textInput}
-        onChangeText={(text) => setNomeGasto(text)}
+        onChangeText={(text) => setTempoPoupanca(text)}
       ></TextInput>
+
       <TextInputMask
         type={'money'}
-        placeholder="quanto gastou?"
-        value={valorGasto}
+        placeholder="Qual o valor que pretende obter no final?"
+        value={valorPrevisto}
         style={styles.textInput}
         maxLength={18}
         onChangeText={value => {
-          setValorGasto(value); // Atualiza o valor no estado sem modificações
+          setValorPrevisto(value);
           value = value.replace('AOA', '');
           value = value.replace('.', '');
           value = value.replace(',', '');
-          setValorGastoReal(Number(value));
+          setValorPrevistoReal(Number(value));
         }}
-       
+      ></TextInputMask>
 
-      >
-      </TextInputMask>
-
-      {/* <TextInputMask
+      <TextInputMask
         type={'money'}
-        placeholder="quanto gastou?"
-        value={valorGasto}
+        placeholder="Qual o valor que pretende adicionar mensalmente?"
+        value={valorMensal}
         style={styles.textInput}
         maxLength={18}
         onChangeText={value => {
-          setValorGasto(value);
-          // value = value.replace('AOA','');
-          // value = value.replace('.','');
-          // value = value.replace(',','');
-          // setValorGasto(Number(value));
+          setValorMensal(value);
+          value = value.replace('AOA', '');
+          value = value.replace('.', '');
+          value = value.replace(',', '');
+          setValorMensalReal(Number(value));
         }}
-      ></TextInputMask> */}
-
-
+      ></TextInputMask>
 
       <Pressable
         onPress={toggleDatePicker}
@@ -161,7 +154,7 @@ export default function AddGasto() {
         <TextInput
           placeholder="quando fez esse gasto?"
           style={styles.textInput}
-          onChangeText={(text) => setDataGasto(date.toString())}
+          onChangeText={(text) => setDataPoupanca(date.toString())}
 
           // onPressIn={toggleDatePicker}
           value={date.toDateString()}
@@ -172,37 +165,8 @@ export default function AddGasto() {
 
 
       {/* <Button title="Show Date Picker" onPress={showDatePicker} /> */}
-      {showPicker && (
 
-        <DateTimePicker
-          mode="date"
 
-          display="spinner"
-          onChange={onChange}
-          value={date}
-        />
-      )}
-      {showPicker && (
-
-        <Pressable
-          onPress={toggleDatePicker}
-        >
-          <TextInput
-            placeholder="sat aug 21 2004"
-            value={dataGasto}
-            onChangeText={setDataGasto}
-            editable={false}
-            onPressIn={toggleDatePicker}
-          />
-        </Pressable>
-
-      )}
-      {/* <TextInput
-        placeholder="tipo de gasto"
-        style={styles.textInput}
-        onChangeText={(text) => setTipoGasto(text)}
-      >
-      </TextInput> */}
       <RNPickerSelect
 
         style={{
@@ -213,7 +177,6 @@ export default function AddGasto() {
             borderRadius: 5,
             width: 340,
             height: 50,
-
             borderBottomWidth: 0.5,
             borderBottomColor: '#C0C0C0',
           },
@@ -231,12 +194,14 @@ export default function AddGasto() {
         // onPress={() => navigation.navigate('Home')}
         onPress={
           () => {
-            if (!nomeGasto.replaceAll(" ", "") || !categoria.replaceAll(" ", "") || !tipoGasto.replaceAll(" ", "")) {
-              alert("Preencha todos campos!1-" + nomeGasto + "2-" + categoria + "3-" + dataGasto + "4-" + tipoGasto);
+
+            if (!objectivo.replaceAll(" ", "") || !tempoPoupanca.replaceAll(" ", "") || !valorPrevisto.replaceAll(" ", "") ||
+              !valorMensal.replaceAll(" ", "") || !dataPoupanca.replaceAll(" ", "")) {
+              alert("Preencha todos campos!"+objectivo.replaceAll(" ", ""));
             } else {
               double();
-              navigation.navigate('Despesas', { userName: userName, id: id })
-              alert("gasto registado!" + valorGasto);
+              navigation.navigate('Poupancas', { userName: userName, id: id })
+              alert("Poupança criada com sucesso!");
             }
 
           }

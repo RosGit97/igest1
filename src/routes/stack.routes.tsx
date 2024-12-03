@@ -3,6 +3,8 @@ import Rendimentos from "../components/Rendimentos";
 import 'react-native-gesture-handler';
 import { createStackNavigator } from '@react-navigation/stack';
 import Menu from '../components/Menu';
+import Login from '../components/Login';
+import Auxi from '../components/auxi';
 const Stack = createStackNavigator();
 
 
@@ -12,16 +14,18 @@ export default function StackRoutes() {
 
     <Stack.Navigator>
       <Stack.Screen
-        name="Menu"
-        component={Menu}
+        name="Login"
+        component={Auxi}
         options={{ headerShown: false }}
       />
 
-      <Stack.Screen
+
+
+      {/* <Stack.Screen
         name="Rendimentos"
         component={Rendimentos}
         options={{ headerShown: false }}
-      />
+      /> */}
 
     </Stack.Navigator>
 
