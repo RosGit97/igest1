@@ -1,27 +1,96 @@
 
-import React from "react";
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, ImageBackground } from 'react-native';
+import React, { useEffect, useState } from "react";
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, ImageBackground, Button, FlatList } from 'react-native';
 import { useFonts, Frijole_400Regular } from '@expo-google-fonts/frijole';
 import { Fruktur_400Regular } from '@expo-google-fonts/fruktur';
-
+import { useNavigation, RouteProp, useRoute } from "@react-navigation/native";
+import { createStackNavigator } from '@react-navigation/stack';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from "./types";
+import { propsStack } from ".";
+import PieChart from 'react-native-pie-chart';
+import Axios from "axios";
+const Stack = createStackNavigator();
+type DespesasScreenRouteProp = RouteProp<RootStackParamList, 'Despesas'>;
+type DespesasScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Despesas'>;
+interface DadosBD {
+    id: number;
+    produto: string;
+    valor: string;
+  }
 
 export default function Despesas() {
-
+    const navigation = useNavigation<DespesasScreenNavigationProp>();
     const add = require("../../assets/icons/add.png");
     const fundo = require("../../assets/icons/fundo1.jpg");
+    const [dados, setDados] = useState("");
+    const [dadosBD, setDadosBD] = useState<DadosBD[]>([]);
+    const route = useRoute<DespesasScreenRouteProp>();
+    const userName = route.params.userName;
+    const id = route.params.id;
+
+
+    useEffect(() => {
+        // Função para buscar os dados da API
+        const fetchData = async () => {
+            try {
+                const response = await fetch('http://192.168.100.9:3001/getGastos');
+                const json = await response.json();
+                setDadosBD(json);
+            } catch (error) {
+                console.error('Erro ao buscar dados:', error);
+            }
+        };
+
+        fetchData();
+    }, []);
+
 
     const [fontLoaded] = useFonts({ Frijole_400Regular, Fruktur_400Regular });
+    // const handleClickButton = () => {
 
+    //     Axios.get("http://192.168.100.10:3001/verGastos")
+    //         .then((res) => {
+    //             console.log(res.data);
+    //             setDados(res.data)
+    //             const pieData = res.data.map((value,index) =>({
+    //                 value,
+    //                 key: `${index}`
+    //             }))
+    //         });
+
+    // };
+    const handleClickButton = () => {
+
+        Axios.get("http://192.168.100.9:3001/getGastos")
+            .then((res) => {
+                // console.log(res.data);
+                setDados(res.data)
+                console.log(dados)
+            });
+
+    };
+
+    // function double() {
+    //     handleClickButton();
+
+    //   }
     if (!fontLoaded) {
         return null;
     }
+
+    // const [listGastos, setListGastos]=useState()
+
 
     // const [fontLoaded2] = useFonts({ Fruktur_400Regular });
 
     // if (!fontLoaded2) {
     //     return null;
     // }
-
+    const handlePress = (item: DadosBD) => {
+        console.log('Item pressionado:', item);
+        // Aqui você pode adicionar a lógica para o que deve acontecer ao clicar no item
+      };
 
     return (
         <View style={styles.container}>
@@ -54,71 +123,37 @@ export default function Despesas() {
 
 
                 }}>
-                    <View style={styles.viewValor}>
-                        <Text style={styles.textValor}>500.000,00 AKZ</Text>
-                        <Text style={styles.textValor}>dd/mm/AAAA</Text>
-                    </View>
 
-                    <View style={styles.viewValor}>
-                        <Text style={styles.textValor}>500.000,00 AKZ</Text>
-                        <Text style={styles.textValor}>dd/mm/AAAA</Text>
-                    </View>
-
-                    <View style={styles.viewValor}>
-                        <Text style={styles.textValor}>500.000,00 AKZ</Text>
-                        <Text style={styles.textValor}>dd/mm/AAAA</Text>
-                    </View>
-
-                    <View style={styles.viewValor}>
-                        <Text style={styles.textValor}>500.000,00 AKZ</Text>
-                        <Text style={styles.textValor}>dd/mm/AAAA</Text>
-                    </View>
-
-                    <View style={styles.viewValor}>
-                        <Text style={styles.textValor}>500.000,00 AKZ</Text>
-                        <Text style={styles.textValor}>dd/mm/AAAA</Text>
-                    </View>
-
-                    <View style={styles.viewValor}>
-                        <Text style={styles.textValor}>500.000,00 AKZ</Text>
-                        <Text style={styles.textValor}>dd/mm/AAAA</Text>
-                    </View>
-
-                    <View style={styles.viewValor}>
-                        <Text style={styles.textValor}>500.000,00 AKZ</Text>
-                        <Text style={styles.textValor}>dd/mm/AAAA</Text>
-                    </View>
-
-                    <View style={styles.viewValor}>
-                        <Text style={styles.textValor}>500.000,00 AKZ</Text>
-                        <Text style={styles.textValor}>dd/mm/AAAA</Text>
-                    </View>
-
-                    <View style={styles.viewValor}>
-                        <Text style={styles.textValor}>500.000,00 AKZ</Text>
-                        <Text style={styles.textValor}>dd/mm/AAAA</Text>
-                    </View>
-
-                    <View style={styles.viewValor}>
-                        <Text style={styles.textValor}>500.000,00 AKZ</Text>
-                        <Text style={styles.textValor}>dd/mm/AAAA</Text>
-                    </View>
-
-
+                    <FlatList
+                        data={dadosBD}
+                        keyExtractor={(item) => item.id.toString()}
+                        renderItem={({ item }) => (
+                            
+                            <View style={styles.viewValor}>
+                                <TouchableOpacity style={styles.viewValor} onPress={() => handlePress(item)}>
+                                <Text style={styles.textValor}>{item.produto}</Text>
+                                <Text style={styles.textValor}>{item.valor}</Text>
+                                </TouchableOpacity>
+                            </View>
+                            
+                        )}
+                    />
+                 
                 </View>
-                <View style={{
-                    flex: 1,
+                <View style={styles.addView}>
+                    <TouchableOpacity
 
-                    height: '20%',
-                    width: '100%',
-                    alignItems: 'flex-end',
+                        onPress={() => navigation.navigate('AddGasto', { userName: userName, id: id })}
 
-                }}>
-                    <ImageBackground source={add} resizeMode='cover' style={{ width: 60, height: 60 }} />
+                    >
+                        <ImageBackground source={add} resizeMode='cover' style={{ width: 60, height: 60 }} />
+
+                    </TouchableOpacity>
+
 
                 </View>
             </View>
-        
+
         </View>
     );
 }
@@ -186,4 +221,29 @@ const styles = StyleSheet.create({
 
         fontSize: 20,
     },
+    button: {
+        marginTop: 20,
+        width: 150,
+        height: 40,
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderTopStartRadius: 30,
+        borderBottomEndRadius: 30,
+        borderBottomWidth: 0.25,
+        borderBottomColor: '#DCDCDC',
+        // borderTopWidth: 0.25,
+        // borderTopColor: '#DCDCDC',
+        borderLeftWidth: 0.25,
+        borderLeftColor: '#DCDCDC',
+        borderRightWidth: 0.25,
+        borderRightColor: '#DCDCDC',
+    },
+    addView: {
+
+        height: 'auto',
+        width: 'auto',
+        alignSelf: 'flex-end',
+        marginEnd: 5,
+    }
 });

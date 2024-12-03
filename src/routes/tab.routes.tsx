@@ -61,29 +61,10 @@ export default function TabRoutes() {
                         height: '100%',
                         borderTopStartRadius: 15,
                         borderTopEndRadius: 15,
-                    }}></View>;
-                },
-
-                // tabBarIcon: ({ focused, color, size }) => {
-
-                //     const home = require("../../assets/icons/home.png");
-                //     const undo = require("../../assets/icons/undo.png");
-                //     const user = require("../../assets/icons/User.png");
-
-                //     if (route.name === 'Back') {
-                //         return <ImageBackground source={undo} resizeMode='cover' style={{ width: 35, height: 35, }} />;
-
-                //     } else if (route.name === 'Home') {
-                //         return <ImageBackground source={home} resizeMode='cover' style={{ width: 35, height: 35,  }} />;
-
-                //     } else if (route.name === 'Login') {
-                //         return <ImageBackground source={user} resizeMode='cover' style={{ width: 35, height: 35, }} />;
-
-                //     }
-                // },
+                    }}></View>
+                }
 
                 
-                tabBarInactiveTintColor: '#fff',
             })}
         >
 
@@ -97,23 +78,24 @@ export default function TabRoutes() {
                     ><Entypo name="back" color={color} size={size} /></TouchableOpacity>
                 }}
             /> */}
+            
             <Tab.Screen
-                name="Home"
-                component={Auxi}
-                options={{
-                    tabBarActiveTintColor: '#C0C0C0',
-                    tabBarIcon: ({ color, size }) => <Feather name="home" color={color} size={size} />
-                }}
-            />
-            <Tab.Screen
-                name="Login"
+                name="login"
                 component={Auxi}
                 options={{
                     tabBarActiveTintColor: '#C0C0C0',
                     tabBarIcon: ({ color, size }) => <FontAwesome name="user-circle-o" color={color} size={size} />
                 }}
 
-            />
+            /><Tab.Screen
+            name="Home"
+            component={Menu}
+        
+            options={{
+                tabBarActiveTintColor: '#C0C0C0',
+                tabBarIcon: ({ color, size }) => <Feather name="home" color={color} size={size} />
+            }}
+        />
             {/* <Tab.Screen
                 name="rendimentos"
                 

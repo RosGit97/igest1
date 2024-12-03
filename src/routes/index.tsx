@@ -8,8 +8,8 @@ export default function Routes() {
 
     return (
             <NavigationContainer>
-                <TabRoutes />
-                {/* <StackRoutes /> */}
+                {/* <TabRoutes /> */}
+                <StackRoutes />
             </NavigationContainer>
             
     )

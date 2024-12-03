@@ -3,14 +3,11 @@ import React from "react";
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, ImageBackground } from 'react-native';
 import { useNavigation } from "@react-navigation/native";
 import { propsStack } from ".";
-import DateTimePicker from '@react-native-community/datetimepicker';
 
-export default function Cadastro() {
+export default function RegistarGastos1() {
   const navigation = useNavigation<propsStack>();
 
   const fundo = require("../../assets/icons/fundo1.jpg");
-
-  
   return (
     <View style={styles.containerHeader}>
       {/* here, i will be define the especifications of background */}
@@ -21,22 +18,19 @@ export default function Cadastro() {
           opacity: 0.2,
           position: 'absolute',
         }} />
-      <Text style={styles.text}>Cadastre-se!</Text>
-      <TextInput placeholder="Nome" style={styles.textInput}></TextInput>
-      <TextInput placeholder="Sobrenome" style={styles.textInput}></TextInput>
-      <TextInput placeholder="" style={styles.textInput}></TextInput>
+        <Text style={styles.text}>Bem-Vindo!</Text>
+        <TextInput placeholder="Nome de usuario" style={styles.textInput}></TextInput>
+        <TextInput placeholder="senha" secureTextEntry={true} style={styles.textInput}></TextInput>
 
-      <TextInput placeholder="senha" secureTextEntry={true} style={styles.textInput}></TextInput>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate('Home')}
+        >
+          <Text style={styles.textButton}>Entrar</Text>
+        </TouchableOpacity>
+        <Text style={{color: '#C0C0C0'}}>Esqueceu a senha?</Text>
 
-  
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => navigation.navigate('Login')}
-
-      >
-        <Text style={styles.textButton}>Submeter</Text>
-      </TouchableOpacity>
-
+       
     </View>
   );
 }
@@ -61,7 +55,7 @@ const styles = StyleSheet.create({
   textInput: {
     width: '80%',
     height: 50,
-
+    
     borderBottomWidth: 0.5,
     borderBottomColor: '#C0C0C0',
   },
