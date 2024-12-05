@@ -70,9 +70,9 @@ export default function Login() {
         
         if (responseData.message === "Login bem-sucedido.") {
             setUserId(responseData.user.id);
-            alert('Bem-vindo de volta ' + dados.nome);
+            alert('Bem-vindo de volta ' + responseData.user.nome);
             navigation.navigate('Home', { 
-                userName: dados.nome, 
+                userName: responseData.user.nome, 
                 id: responseData.user.id, 
                 idFamilia: responseData.user.idFamilia 
             });

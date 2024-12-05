@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, ImageBackground, Button, FlatList } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Modal, TouchableOpacity, ImageBackground, Button, FlatList } from 'react-native';
 import { useFonts, Frijole_400Regular } from '@expo-google-fonts/frijole';
 import { Fruktur_400Regular } from '@expo-google-fonts/fruktur';
 import { useNavigation, RouteProp, useRoute } from "@react-navigation/native";
@@ -17,7 +17,10 @@ interface DadosBD {
     id: number;
     produto: string;
     valor: string;
-  }
+    categoria: string,
+    data: string,
+    
+}
 
 export default function Despesas() {
     const navigation = useNavigation<DespesasScreenNavigationProp>();
@@ -28,7 +31,8 @@ export default function Despesas() {
     const route = useRoute<DespesasScreenRouteProp>();
     const userName = route.params.userName;
     const id = route.params.id;
-
+    const [modalVisible, setModalVisible] = useState(false);
+    const [selectedItem, setSelectedItem] = useState<DadosBD | null>(null);
 
     useEffect(() => {
         // Função para buscar os dados da API
@@ -70,6 +74,10 @@ export default function Despesas() {
             });
 
     };
+    const closeModal = () => {
+        setModalVisible(false); // Fecha o modal
+        setSelectedItem(null); // Limpa o item selecionado
+    };
 
     // function double() {
     //     handleClickButton();
@@ -89,8 +97,10 @@ export default function Despesas() {
     // }
     const handlePress = (item: DadosBD) => {
         console.log('Item pressionado:', item);
+        setSelectedItem(item); // Define o item selecionado
+        setModalVisible(true); // Exibe o modal
         // Aqui você pode adicionar a lógica para o que deve acontecer ao clicar no item
-      };
+    };
 
     return (
         <View style={styles.container}>
@@ -128,17 +138,41 @@ export default function Despesas() {
                         data={dadosBD}
                         keyExtractor={(item) => item.id.toString()}
                         renderItem={({ item }) => (
-                            
+
                             <View style={styles.viewValor}>
                                 <TouchableOpacity style={styles.viewValor} onPress={() => handlePress(item)}>
-                                <Text style={styles.textValor}>{item.produto}</Text>
-                                <Text style={styles.textValor}>{item.valor}</Text>
+                                    <Text style={styles.textValor}>{item.produto}</Text>
+                                    <Text style={styles.textValor}>{item.valor}</Text>
                                 </TouchableOpacity>
                             </View>
-                            
+
                         )}
                     />
-                 
+
+                    {/* Modal */}
+                    <Modal
+                        visible={modalVisible}
+                        transparent={true}
+                        animationType="slide"
+                        onRequestClose={closeModal}
+                    >
+                        <View style={styles.modalContainer}>
+                            <View style={styles.modalContent}>
+                                {selectedItem && (
+                                    <>
+                                        <Text style={styles.modalTitle}>Detalhes do Produto</Text>
+                                        <Text>Produto: {selectedItem.produto}</Text>
+                                        <Text>Valor: {selectedItem.valor}</Text>
+                                        <Text>Categoria: {selectedItem.categoria}</Text>
+                                        <Text>nome: {userName}</Text>
+                                        <Text>Data: {selectedItem.data}</Text>
+                                    </>
+                                )}
+                                <Button title="Fechar" onPress={closeModal} />
+                            </View>
+                        </View>
+                    </Modal>
+
                 </View>
                 <View style={styles.addView}>
                     <TouchableOpacity
@@ -245,5 +279,23 @@ const styles = StyleSheet.create({
         width: 'auto',
         alignSelf: 'flex-end',
         marginEnd: 5,
-    }
+    },
+    modalContainer: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "rgba(0, 0, 0, 0.5)",
+      },
+      modalContent: {
+        width: "80%",
+        padding: 20,
+        backgroundColor: "#fff",
+        borderRadius: 10,
+        alignItems: "center",
+      },
+      modalTitle: {
+        fontSize: 18,
+        fontWeight: "bold",
+        marginBottom: 10,
+      },
 });
