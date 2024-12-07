@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, ImageBackground, FlatList } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, ImageBackground, FlatList, Modal } from 'react-native';
 import { useFonts, Frijole_400Regular } from '@expo-google-fonts/frijole';
 import { Fruktur_400Regular } from '@expo-google-fonts/fruktur';
 import { useNavigation, RouteProp, useRoute } from "@react-navigation/native";
@@ -18,7 +18,9 @@ interface DadosBD {
     id: number;
     fonte_rendimento: string;
     valor: string;
-  }
+    data: string;
+    idUsuario: string;
+}
 export default function Rendimentos() {
     const navigation = useNavigation<RendimentosScreenNavigationProp>();
     const add = require("../../assets/icons/add.png");
@@ -28,7 +30,8 @@ export default function Rendimentos() {
     const userName = route.params.userName;
     const id = route.params.id;
     const [fontLoaded] = useFonts({ Frijole_400Regular, Fruktur_400Regular });
-
+    const [modalVisible, setModalVisible] = useState(false);
+    const [selectedItem, setSelectedItem] = useState<DadosBD | null>(null);
 
     useEffect(() => {
         // Função para buscar os dados da API
@@ -55,9 +58,17 @@ export default function Rendimentos() {
     //     return null;
     // }
     const handlePress = (item: DadosBD) => {
-        console.log('Item pressionado:', item);
+        
         // Aqui você pode adicionar a lógica para o que deve acontecer ao clicar no item
-      };
+        console.log('Item pressionado:', item);
+        setSelectedItem(item); // Define o item selecionado
+        setModalVisible(true); // Exibe o modal
+    };
+
+    const closeModal = () => {
+        setModalVisible(false); // Fecha o modal
+        setSelectedItem(null); // Limpa o item selecionado
+    };
 
     return (
         <View style={styles.container}>
@@ -90,21 +101,53 @@ export default function Rendimentos() {
 
 
                 }}>
-                    
+
                     <FlatList
                         data={dadosBD}
                         keyExtractor={(item) => item.id.toString()}
                         renderItem={({ item }) => (
-                            
+
                             <View style={styles.viewValor}>
                                 <TouchableOpacity style={styles.viewValor} onPress={() => handlePress(item)}>
-                                <Text style={styles.textValor}>{item.fonte_rendimento}</Text>
-                                <Text style={styles.textValor}>{item.valor} AKZ</Text>
+                                    <Text style={styles.textValor}>{item.fonte_rendimento}</Text>
+                                    <Text style={styles.textValor}>{item.valor} AKZ</Text>
                                 </TouchableOpacity>
                             </View>
-                            
+
                         )}
                     />
+
+                    <Modal
+                        visible={modalVisible}
+                        transparent={true}
+                        animationType="slide"
+                        onRequestClose={closeModal}
+                    >
+                        <View style={styles.modalContainer}>
+                            <View style={styles.modalContent}>
+                                {selectedItem && (
+                                    <>
+                                        <Text style={styles.modalTitle}>Detalhes</Text>
+                                        <Text >Fonte: {selectedItem.fonte_rendimento}</Text>
+                                        <Text >Valor: {selectedItem.valor}</Text>
+                                        <Text>nome: {selectedItem.idUsuario}</Text>
+                                        <Text>Data: {selectedItem.data}</Text>
+                                    </>
+                                )}
+                                <TouchableOpacity
+
+                                    onPress={closeModal}
+                                >
+                                    <ImageBackground
+                                        source={require('../../assets/icons/close.png')} // Caminho da imagem
+                                        resizeMode="cover"
+                                        style={{ marginStart: 10, width: 50, height: 50, }}
+                                    >
+                                    </ImageBackground>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </Modal>
 
                 </View>
                 {/* <View style={{
@@ -123,11 +166,11 @@ export default function Rendimentos() {
                     height: 'auto',
                     width: 'auto',
                     alignSelf: 'flex-end',
-                    marginEnd: 5, 
+                    marginEnd: 5,
 
                 }}><TouchableOpacity
 
-                    onPress={() => navigation.navigate('AddRendimentos', {userName:userName, id:id})}
+                    onPress={() => navigation.navigate('AddRendimentos', { userName: userName, id: id })}
 
                 >
                         <ImageBackground source={add} resizeMode='cover' style={{ width: 60, height: 60 }} />
@@ -205,5 +248,26 @@ const styles = StyleSheet.create({
         fontFamily: 'Fruktur_400Regular',
 
         fontSize: 20,
+    },
+    modalContainer: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "rgba(0, 0, 0, 0.5)",
+       
+    },
+    modalContent: {
+        width: "80%",
+        padding: 20,
+        backgroundColor: "#fff",
+        borderRadius: 10,
+        borderColor: '#49688D',
+        borderWidth: 2,
+        alignItems: "center",
+    },
+    modalTitle: {
+        fontSize: 18,
+        fontWeight: "bold",
+        marginBottom: 10,
     },
 });

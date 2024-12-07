@@ -15,17 +15,19 @@ type DespesasScreenRouteProp = RouteProp<RootStackParamList, 'Despesas'>;
 type DespesasScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Despesas'>;
 interface DadosBD {
     id: number;
+    idUsuario: string;
     produto: string;
     valor: string;
     categoria: string,
     data: string,
-    
+
 }
 
 export default function Despesas() {
     const navigation = useNavigation<DespesasScreenNavigationProp>();
     const add = require("../../assets/icons/add.png");
     const fundo = require("../../assets/icons/fundo1.jpg");
+    const closeButton = require("../../assets/icons/close.png");
     const [dados, setDados] = useState("");
     const [dadosBD, setDadosBD] = useState<DadosBD[]>([]);
     const route = useRoute<DespesasScreenRouteProp>();
@@ -96,10 +98,11 @@ export default function Despesas() {
     //     return null;
     // }
     const handlePress = (item: DadosBD) => {
+        
+        // Aqui você pode adicionar a lógica para o que deve acontecer ao clicar no item^
         console.log('Item pressionado:', item);
         setSelectedItem(item); // Define o item selecionado
         setModalVisible(true); // Exibe o modal
-        // Aqui você pode adicionar a lógica para o que deve acontecer ao clicar no item
     };
 
     return (
@@ -161,14 +164,24 @@ export default function Despesas() {
                                 {selectedItem && (
                                     <>
                                         <Text style={styles.modalTitle}>Detalhes do Produto</Text>
-                                        <Text>Produto: {selectedItem.produto}</Text>
+                                        <Text >Produto: {selectedItem.produto}</Text>
                                         <Text>Valor: {selectedItem.valor}</Text>
                                         <Text>Categoria: {selectedItem.categoria}</Text>
-                                        <Text>nome: {userName}</Text>
+                                        <Text>nome: {selectedItem.idUsuario}</Text>
                                         <Text>Data: {selectedItem.data}</Text>
                                     </>
                                 )}
-                                <Button title="Fechar" onPress={closeModal} />
+                                <TouchableOpacity
+                                    
+                                    onPress={closeModal}
+                                >
+                                    <ImageBackground
+                                        source={require('../../assets/icons/close.png')} // Caminho da imagem
+                                        resizeMode="cover"
+                                        style={{ marginStart: 10, width: 50, height: 50, }}
+                                    >
+                                    </ImageBackground>
+                                </TouchableOpacity>
                             </View>
                         </View>
                     </Modal>
@@ -285,17 +298,20 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "rgba(0, 0, 0, 0.5)",
-      },
-      modalContent: {
+       
+    },
+    modalContent: {
         width: "80%",
         padding: 20,
         backgroundColor: "#fff",
         borderRadius: 10,
+        borderColor: '#49688D',
+        borderWidth: 2,
         alignItems: "center",
-      },
-      modalTitle: {
+    },
+    modalTitle: {
         fontSize: 18,
         fontWeight: "bold",
         marginBottom: 10,
-      },
+    },
 });
