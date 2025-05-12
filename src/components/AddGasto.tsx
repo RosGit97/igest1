@@ -78,7 +78,7 @@ export default function AddGasto() {
       tipo_gasto: tipoGasto,
       idUsuario: id,
     };
-    Axios.post("http://192.168.100.9:3001/registoGasto", dados)
+    Axios.post("http://192.168.100.14:3001/registoGasto", dados)
       .then(response => {
         // Aqui dentro do bloco then, você tem acesso aos dados retornados pela requisição
         console.log('Dados enviados com sucesso:', response.data);

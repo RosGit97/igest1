@@ -69,14 +69,15 @@ export default function AddPoupanca() {
       // Seus dados para enviar no corpo da requisição POST
       objectivo: objectivo,
       tempoPoupanca: tempoPoupanca,
-      valorPrevisto: valorPrevisto.replace("R$", ""),
-      valorMensal: valorMensal.replace("R$", ""),
+      // valorPrevisto: valorPrevisto.replace("R$", ""),
+      // valorMensal: valorMensal.replace("R$", ""),
+      valorPrevisto: valorPrevistoReal,
+      valorMensal: valorMensalReal,
       dataPoupanca: dia + "/" + mes + "/" + ano,
       idUsuario: id,
-
       tipo_gasto: tipoGasto,
     };
-    Axios.post("http://192.168.100.9:3001/registoPoupanca", dados)
+    Axios.post("http://192.168.100.14:3001/registoPoupanca", dados)
       .then(response => {
         // Aqui dentro do bloco then, você tem acesso aos dados retornados pela requisição
         console.log('Dados enviados com sucesso:', response.data);
@@ -92,6 +93,7 @@ export default function AddPoupanca() {
 
   function double() {
     handleClickButton();
+    console.log(valorPrevistoReal)
     // alert(successMessage)
   }
 
@@ -118,7 +120,7 @@ export default function AddPoupanca() {
         onChangeText={(text) => setTempoPoupanca(text)}
       ></TextInput>
 
-      <TextInputMask
+      {/* <TextInputMask
         type={'money'}
         placeholder="Qual o valor que pretende obter no final?"
         value={valorPrevisto}
@@ -131,9 +133,72 @@ export default function AddPoupanca() {
           value = value.replace(',', '');
           setValorPrevistoReal(Number(value));
         }}
-      ></TextInputMask>
+      ></TextInputMask> */}
+
+
+      {/* testing number input */}
 
       <TextInputMask
+        type={'money'}
+        options={{
+          precision: 2, // Número de casas decimais
+          separator: ',', // Separador decimal
+          delimiter: '.', // Separador de milhar
+          unit: 'AOA ', // Símbolo da moeda
+          suffixUnit: '', // Sufixo da unidade (caso necessário)
+        }}
+        placeholder="Qual o valor que pretende obter no final?"
+        value={valorPrevisto}
+        style={styles.textInput}
+        keyboardType="number-pad" // Define teclado numérico
+        maxLength={18}
+        onChangeText={(formattedValue) => {
+          setValorPrevisto(formattedValue); // Atualiza o valor formatado
+          const numericValue = Number(
+            formattedValue
+              .replace('AOA', '') // Remove o prefixo da moeda
+              .replace(/\./g, '') // Remove separadores de milhar
+              .replace(',', '.') // Substitui vírgula por ponto para decimais
+              .trim() // Remove espaços em branco
+          );
+          setValorPrevistoReal(numericValue); // Atualiza o valor numérico real
+        }}
+      />
+
+      {/*  */}
+
+      {/* testing input 2 */}
+
+      <TextInputMask
+        type={'money'}
+        options={{
+          precision: 2, // Define 2 casas decimais
+          separator: ',', // Usa vírgula como separador decimal
+          delimiter: '.', // Usa ponto como separador de milhar
+          unit: 'AOA ', // Define "AOA" como prefixo
+          suffixUnit: '', // Sem sufixo adicional
+        }}
+        placeholder="Qual o valor que pretende adicionar mensalmente?"
+        value={valorMensal}
+        style={styles.textInput}
+        keyboardType="number-pad" // Garante teclado numérico
+        maxLength={18}
+        onChangeText={(formattedValue) => {
+          setValorMensal(formattedValue); // Atualiza o valor formatado
+          const numericValue = Number(
+            formattedValue
+              .replace('AOA', '') // Remove o prefixo da moeda
+              .replace(/\./g, '') // Remove separadores de milhar
+              .replace(',', '.') // Substitui vírgula por ponto para decimais
+              .trim() // Remove espaços em branco extras
+          );
+          setValorMensalReal(numericValue); // Atualiza o valor numérico real
+        }}
+      ></TextInputMask>
+
+      {/*  */}
+
+      {/* <TextInputMask
         type={'money'}
         placeholder="Qual o valor que pretende adicionar mensalmente?"
         value={valorMensal}
@@ -146,7 +211,18 @@ export default function AddPoupanca() {
           value = value.replace(',', '');
           setValorMensalReal(Number(value));
         }}
-      ></TextInputMask>
+      ></TextInputMask> */}
+
+      {showPicker && (
+
+        <DateTimePicker
+          mode="date"
+
+          display="spinner"
+          onChange={onChange}
+          value={date}
+        />
+      )}
 
       <Pressable
         onPress={toggleDatePicker}
@@ -196,8 +272,8 @@ export default function AddPoupanca() {
           () => {
 
             if (!objectivo.replaceAll(" ", "") || !tempoPoupanca.replaceAll(" ", "") || !valorPrevisto.replaceAll(" ", "") ||
-              !valorMensal.replaceAll(" ", "") || !dataPoupanca.replaceAll(" ", "")) {
-              alert("Preencha todos campos!"+objectivo.replaceAll(" ", ""));
+              !valorMensal.replaceAll(" ", "") || !date) {
+              alert("Preencha todos campos!");
             } else {
               double();
               navigation.navigate('Poupancas', { userName: userName, id: id })

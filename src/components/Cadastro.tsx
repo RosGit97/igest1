@@ -60,7 +60,7 @@ export default function Cadastro() {
       idFamilia: idFamilia,
     };
 
-    Axios.post("http://192.168.100.9:3001/procuraIdFamilia", dados)
+    Axios.post("http://192.168.100.14:3001/procuraIdFamilia", dados)
       .then(response => {
         const responseData = response.data;
         // Aqui dentro do bloco then, você tem acesso aos dados retornados pela requisição
@@ -70,7 +70,7 @@ export default function Cadastro() {
 
         if (response.data.id == idFamilia) {
 
-          Axios.post("http://192.168.100.9:3001/registoUser", dados)
+          Axios.post("http://192.168.100.14:3001/registoUser", dados)
             .then(response1 => {
               // Aqui dentro do bloco then, você tem acesso aos dados retornados pela requisição
               console.log('Dados enviados com sucesso:', response1.data);
@@ -84,7 +84,7 @@ export default function Cadastro() {
                     id: dados.id,
                     
                 };
-                Axios.post("http://192.168.100.9:3001/criarSaldo", dados1)
+                Axios.post("http://192.168.100.14:3001/criarSaldo", dados1)
                     .then(response1 => {
                         // Aqui dentro do bloco then, você tem acesso aos dados retornados pela requisição
                         console.log('saldo criado:', response1.data);
@@ -108,7 +108,7 @@ export default function Cadastro() {
       });
 
 
-    // Axios.post("http://192.168.100.9:3001/registoUser", dados)
+    // Axios.post("http://192.168.100.14:3001/registoUser", dados)
     //   .then(response => {
     //     // Aqui dentro do bloco then, você tem acesso aos dados retornados pela requisição
     //     console.log('Dados enviados com sucesso:', response.data);

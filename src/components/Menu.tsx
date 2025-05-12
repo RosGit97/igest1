@@ -73,7 +73,7 @@ export default function Menu() {
 
         };
 
-        Axios.post("http://192.168.100.9:3001/procuraNomeFamilia", dados)
+        Axios.post("http://192.168.100.14:3001/procuraNomeFamilia", dados)
             .then(response => {
                 const responseData = response.data;
                 // Aqui dentro do bloco then, você tem acesso aos dados retornados pela requisição
@@ -93,7 +93,7 @@ export default function Menu() {
     //     // Função para buscar os dados da API 
     //     const fetchData = async () => {
     //         try {
-    //             const response = await fetch('http://192.168.100.9:3001/pegarSaldo');
+    //             const response = await fetch('http://192.168.100.14:3001/pegarSaldo');
     //             const json = await response.json();
     //             setSaldo(json);
     //             console.error('Erro ao buscar dados:hbh');
@@ -113,7 +113,7 @@ export default function Menu() {
 
         };
 
-        Axios.post("http://192.168.100.9:3001/pegarSaldo", dados)
+        Axios.post("http://192.168.100.14:3001/pegarSaldo", dados)
             .then(response => {
                 const responseData = response.data;
                 // Aqui dentro do bloco then, você tem acesso aos dados retornados pela requisição

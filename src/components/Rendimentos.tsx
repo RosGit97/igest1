@@ -37,7 +37,7 @@ export default function Rendimentos() {
         // Função para buscar os dados da API
         const fetchData = async () => {
             try {
-                const response = await fetch('http://192.168.100.9:3001/getRendimentos');
+                const response = await fetch('http://192.168.100.14:3001/getRendimentos');
                 const json = await response.json();
                 setDadosBD(json);
             } catch (error) {

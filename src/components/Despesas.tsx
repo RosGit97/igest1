@@ -40,7 +40,7 @@ export default function Despesas() {
         // Função para buscar os dados da API
         const fetchData = async () => {
             try {
-                const response = await fetch('http://192.168.100.9:3001/getGastos');
+                const response = await fetch('http://192.168.100.14:3001/getGastos');
                 const json = await response.json();
                 setDadosBD(json);
             } catch (error) {
@@ -68,7 +68,7 @@ export default function Despesas() {
     // };
     const handleClickButton = () => {
 
-        Axios.get("http://192.168.100.9:3001/getGastos")
+        Axios.get("http://192.168.100.14:3001/getGastos")
             .then((res) => {
                 // console.log(res.data);
                 setDados(res.data)
@@ -98,7 +98,7 @@ export default function Despesas() {
     //     return null;
     // }
     const handlePress = (item: DadosBD) => {
-        
+
         // Aqui você pode adicionar a lógica para o que deve acontecer ao clicar no item^
         console.log('Item pressionado:', item);
         setSelectedItem(item); // Define o item selecionado
@@ -163,16 +163,32 @@ export default function Despesas() {
                             <View style={styles.modalContent}>
                                 {selectedItem && (
                                     <>
-                                        <Text style={styles.modalTitle}>Detalhes do Produto</Text>
-                                        <Text >Produto: {selectedItem.produto}</Text>
-                                        <Text>Valor: {selectedItem.valor}</Text>
-                                        <Text>Categoria: {selectedItem.categoria}</Text>
-                                        <Text>nome: {selectedItem.idUsuario}</Text>
-                                        <Text>Data: {selectedItem.data}</Text>
+                                        
+                                        <Text style={styles.modalTitle}>Detalhes</Text>
+                                        <View style={{ display: "flex", flexDirection: "row" }}>
+                                            <Text style={styles.valorFinalLabel}>PRODUTO:</Text>
+                                            <Text style={styles.valorFinalValue}>{selectedItem.produto}</Text>
+                                        </View>
+                                        <View style={{ display: "flex", flexDirection: "row" }}>
+                                            <Text style={styles.valorFinalLabel}>VALOR:</Text>
+                                            <Text style={styles.valorFinalValue}>{selectedItem.valor}</Text>
+                                        </View>
+                                        <View style={{ display: "flex", flexDirection: "row" }}>
+                                            <Text style={styles.valorFinalLabel}>CATEGORIA:</Text>
+                                            <Text style={styles.valorFinalValue}>{selectedItem.categoria}</Text>
+                                        </View>
+                                        <View style={{ display: "flex", flexDirection: "row" }}>
+                                            <Text style={styles.valorFinalLabel}>NOME:</Text>
+                                            <Text style={styles.valorFinalValue}>{selectedItem.idUsuario}</Text>
+                                        </View>
+                                        <View style={{ display: "flex", flexDirection: "row" }}>
+                                            <Text style={styles.valorFinalLabel}>DATA:</Text>
+                                            <Text style={styles.valorFinalValue}>{selectedItem.data}</Text>
+                                        </View>
                                     </>
                                 )}
                                 <TouchableOpacity
-                                    
+
                                     onPress={closeModal}
                                 >
                                     <ImageBackground
@@ -298,7 +314,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "rgba(0, 0, 0, 0.5)",
-       
+
     },
     modalContent: {
         width: "80%",
@@ -313,5 +329,16 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: "bold",
         marginBottom: 10,
+    },
+    valorFinalLabel: {
+        fontSize: 18,
+        fontWeight: "bold",
+        color: "#333", // Cor do texto para "Valor Final"
+        marginRight: 8, // Espaçamento entre os textos
+    },
+    valorFinalValue: {
+        fontSize: 18,
+        fontWeight: "600",
+        color: "#007BFF", // Cor do texto para o valor
     },
 });
