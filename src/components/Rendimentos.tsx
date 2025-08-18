@@ -35,7 +35,7 @@ export default function Rendimentos() {
 
     useEffect(() => {
         // Função para buscar os dados da API
-       
+
         const fetchData = async () => {
             try {
                 const response = await fetch(`http://192.168.100.11:3001/getRendimentos?valor=${id}`);
@@ -118,6 +118,9 @@ export default function Rendimentos() {
                             </View>
 
                         )}
+                        ListEmptyComponent={
+                            <Text style={[styles.textValor, styles.viewValor]}>Vazio</Text>
+                        }
                     />
 
                     <Modal

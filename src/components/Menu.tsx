@@ -324,7 +324,7 @@ export default function Menu() {
                     </View>
                     <TouchableOpacity
                         style={styles.button}
-                        onPress={() => navigation.navigate('Poupancas', { userName: userName, id: id })}
+                        onPress={() => navigation.navigate('Poupancas', { userName: userName, id: idActual })}
 
                     >
                     </TouchableOpacity>

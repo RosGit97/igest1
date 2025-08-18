@@ -150,7 +150,7 @@ export default function Poupancas() {
         // Função para buscar os dados da API
         const fetchData = async () => {
             try {
-                const response = await fetch('http://192.168.100.11:3001/getPoupancas');
+                const response = await fetch(`http://192.168.100.11:3001/getPoupancas?valor=${id}`);
                 const json = await response.json();
                 setDadosBD(json);
             } catch (error) {
@@ -234,6 +234,9 @@ export default function Poupancas() {
                             </View>
 
                         )}
+                        ListEmptyComponent={
+                            <Text style={[styles.textValor, styles.viewValor]}>Vazio</Text>
+                        }
                     />
 
                     <Modal
