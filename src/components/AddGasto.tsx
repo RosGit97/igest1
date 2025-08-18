@@ -78,13 +78,58 @@ export default function AddGasto() {
       tipo_gasto: tipoGasto,
       idUsuario: id,
     };
-    Axios.post("http://192.168.100.14:3001/registoGasto", dados)
+    Axios.post("http://192.168.100.11:3001/registoGasto", dados)
       .then(response => {
         // Aqui dentro do bloco then, você tem acesso aos dados retornados pela requisição
         console.log('Dados enviados com sucesso:', response.data);
         setSuccessMessage('Inserção de dados feita com sucesso!');
         // alert('Inserção de dados feita com sucesso!')
-       
+
+        // teste
+
+        // adiçao de saldo
+        const dadosPS = {
+          // Seus dados para enviar no corpo da requisição POST
+          idActual: id,
+
+        };
+        Axios.post("http://192.168.100.11:3001/pegarSaldo", dadosPS)
+          .then(response => {
+            // Aqui dentro do bloco then, você tem acesso aos dados retornados pela requisição
+            const responseData = response.data;
+            // Aqui dentro do bloco then, você tem acesso aos dados retornados pela requisição
+            console.log('sucesso:', responseData[0].valor);
+
+            // chamada da funçao que actualiza o saldo
+            const dadosAS = {
+              // Seus dados para enviar no corpo da requisição POST
+              idActual: id,
+              novoValor: parseFloat(responseData[0].valor) -
+                parseFloat(valorGasto.replace("R$", "").replace(/\./g, "").replace(",", ".")),
+            };
+            Axios.post("http://192.168.100.11:3001/atualizarSaldo", dadosAS)
+              .then(response => {
+                // Aqui dentro do bloco then, você tem acesso aos dados retornados pela requisição
+                const responseData = response.data;
+                // Aqui dentro do bloco then, você tem acesso aos dados retornados pela requisição
+                // console.log('sucesso:', responseData[0].valor);
+
+
+              }).catch(error => {
+                // Se houver algum erro na requisição, você pode tratá-lo aqui
+                console.error('Erro ao fazer requisição:', error);
+                setSuccessMessage('Erro ao inserir dados. Por favor, tente novamente.');
+              });
+            // chamada da funçao que actualiza o saldo
+          }).catch(error => {
+            // Se houver algum erro na requisição, você pode tratá-lo aqui
+            console.error('Erro ao fazer requisição:', error);
+            setSuccessMessage('Erro ao inserir dados. Por favor, tente novamente.');
+          });
+        // adiçao de saldo
+
+        // teste
+
       }).catch(error => {
         // Se houver algum erro na requisição, você pode tratá-lo aqui
         console.error('Erro ao fazer requisição:', error);
@@ -133,7 +178,7 @@ export default function AddGasto() {
           value = value.replace(',', '');
           setValorGastoReal(Number(value));
         }}
-       
+
 
       >
       </TextInputMask>
@@ -236,6 +281,7 @@ export default function AddGasto() {
             } else {
               double();
               navigation.navigate('Despesas', { userName: userName, id: id })
+              
               alert("gasto registado!" + valorGasto);
             }
 

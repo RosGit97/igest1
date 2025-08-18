@@ -13,6 +13,9 @@ import { useNavigation, RouteProp, useRoute } from "@react-navigation/native";
 import { RootStackParamList } from "./types";
 import { propsStack } from ".";
 import Axios from "axios";
+import { useFocusEffect } from '@react-navigation/native';
+import { useCallback } from 'react';
+
 
 const Stack = createStackNavigator();
 type HomeScreenRouteProp = RouteProp<RootStackParamList, 'Home'>;
@@ -54,7 +57,7 @@ export default function Menu() {
         if (selectedValue == userName) {
             alert('você mudou para o perfil pessoal ');
             setIdActual(id);
-            
+
         } else {
             alert('você mudou para o perfil de familia ');
             setIdActual(idFamilia);
@@ -73,7 +76,7 @@ export default function Menu() {
 
         };
 
-        Axios.post("http://192.168.100.14:3001/procuraNomeFamilia", dados)
+        Axios.post("http://192.168.100.11:3001/procuraNomeFamilia", dados)
             .then(response => {
                 const responseData = response.data;
                 // Aqui dentro do bloco then, você tem acesso aos dados retornados pela requisição
@@ -93,7 +96,7 @@ export default function Menu() {
     //     // Função para buscar os dados da API 
     //     const fetchData = async () => {
     //         try {
-    //             const response = await fetch('http://192.168.100.14:3001/pegarSaldo');
+    //             const response = await fetch('http://192.168.100.11:3001/pegarSaldo');
     //             const json = await response.json();
     //             setSaldo(json);
     //             console.error('Erro ao buscar dados:hbh');
@@ -113,11 +116,12 @@ export default function Menu() {
 
         };
 
-        Axios.post("http://192.168.100.14:3001/pegarSaldo", dados)
+        Axios.post("http://192.168.100.11:3001/pegarSaldo", dados)
             .then(response => {
                 const responseData = response.data;
                 // Aqui dentro do bloco then, você tem acesso aos dados retornados pela requisição
                 console.log('sucesso:', responseData[0].valor);
+                console.log('sucesso id:', idActual);
                 setSaldo(responseData[0].valor);
                 // setNomeFamilia(responseData[0].nomeFamilia);
                 // alert('você mudou para o perfil de familia ');
@@ -136,15 +140,32 @@ export default function Menu() {
 
 
     // Use useEffect para chamar pegarSaldo quando idActual mudar
-    useEffect(() => {
-        if (idActual) {
-            pegarSaldo();
-        }
-    }, [idActual]);
+    // useEffect(() => {
+    //     if (idActual) {
 
-    if (!fontLoaded) {
-        return null;
-    }
+    //         pegarSaldo();
+    //         console.log('sucesso id use:', idActual);
+    //     }
+    // }, [idActual]);
+
+    // if (!fontLoaded) {
+    //     return null;
+    // }
+
+    // 
+
+    useFocusEffect(
+        useCallback(() => {
+            // Função que recarrega o saldo
+           if (idActual) {
+
+            pegarSaldo();
+            console.log('sucesso id use:', idActual);
+        }
+        }, [idActual])
+    );
+
+    // 
 
     return (
         <View style={{ height: '100%' }}>
@@ -249,7 +270,7 @@ export default function Menu() {
 
                     <TouchableOpacity
                         style={styles.button}
-                        onPress={() => navigation.navigate('Rendimentos', { userName: userName, id: id })}
+                        onPress={() => navigation.navigate('Rendimentos', { userName: userName, id: idActual })}
 
                     >
                     </TouchableOpacity>
@@ -276,7 +297,7 @@ export default function Menu() {
 
                     <TouchableOpacity
                         style={styles.button}
-                        onPress={() => navigation.navigate('Despesas', { userName: userName, id: id })}
+                        onPress={() => navigation.navigate('Despesas', { userName: userName, id: idActual })}
 
                     >
                     </TouchableOpacity>
@@ -284,6 +305,7 @@ export default function Menu() {
 
                 <View style={styles.viewButton}>
 
+                    
                     <View style={{
                         flex: 1,
                         flexDirection: 'row',

@@ -35,9 +35,10 @@ export default function Rendimentos() {
 
     useEffect(() => {
         // Função para buscar os dados da API
+       
         const fetchData = async () => {
             try {
-                const response = await fetch('http://192.168.100.14:3001/getRendimentos');
+                const response = await fetch(`http://192.168.100.11:3001/getRendimentos?valor=${id}`);
                 const json = await response.json();
                 setDadosBD(json);
             } catch (error) {
@@ -58,7 +59,7 @@ export default function Rendimentos() {
     //     return null;
     // }
     const handlePress = (item: DadosBD) => {
-        
+
         // Aqui você pode adicionar a lógica para o que deve acontecer ao clicar no item
         console.log('Item pressionado:', item);
         setSelectedItem(item); // Define o item selecionado
@@ -108,10 +109,12 @@ export default function Rendimentos() {
                         renderItem={({ item }) => (
 
                             <View style={styles.viewValor}>
+
                                 <TouchableOpacity style={styles.viewValor} onPress={() => handlePress(item)}>
                                     <Text style={styles.textValor}>{item.fonte_rendimento}</Text>
                                     <Text style={styles.textValor}>{item.valor} AKZ</Text>
                                 </TouchableOpacity>
+
                             </View>
 
                         )}
@@ -254,7 +257,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "rgba(0, 0, 0, 0.5)",
-       
+
     },
     modalContent: {
         width: "80%",

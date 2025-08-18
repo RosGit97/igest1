@@ -79,13 +79,59 @@ export default function Poupancas() {
 
         try {
             // Enviar os dados para o backend
-            const response = await Axios.post("http://192.168.100.14:3001/atualizarValorAtual", dados);
+            const response = await Axios.post("http://192.168.100.11:3001/atualizarValorAtual", dados);
 
             // Verificar se a resposta foi bem-sucedida
             if (response.status === 200) {
                 console.log("Valor atualizado com sucesso:", response.data);
                 setSuccessMessage("Valor atualizado com sucesso!");
                 alert("Valor atualizado com sucesso!");
+
+                // 
+
+                const dadosPS = {
+                    // Seus dados para enviar no corpo da requisição POST
+                    idActual: id,
+
+                };
+                Axios.post("http://192.168.100.11:3001/pegarSaldo", dadosPS)
+                    .then(response => {
+                        // Aqui dentro do bloco then, você tem acesso aos dados retornados pela requisição
+                        const responseData = response.data;
+                        // Aqui dentro do bloco then, você tem acesso aos dados retornados pela requisição
+                        console.log('sucesso:', responseData[0].valor);
+
+                        // chamada da funçao que actualiza o saldo
+                        const dadosAS = {
+                            // Seus dados para enviar no corpo da requisição POST
+                            idActual: id,
+                            novoValor: parseFloat(responseData[0].valor) -
+                                parseFloat(addedValue.replace("R$", "").replace(/\./g, "").replace(",", ".")),
+                        };
+                        Axios.post("http://192.168.100.11:3001/atualizarSaldo", dadosAS)
+                            .then(response => {
+                                // Aqui dentro do bloco then, você tem acesso aos dados retornados pela requisição
+                                const responseData = response.data;
+                                // Aqui dentro do bloco then, você tem acesso aos dados retornados pela requisição
+                                // console.log('sucesso:', responseData[0].valor);
+
+
+                            }).catch(error => {
+                                // Se houver algum erro na requisição, você pode tratá-lo aqui
+                                console.error('Erro ao fazer requisição:', error);
+                                setSuccessMessage('Erro ao inserir dados. Por favor, tente novamente.');
+                            });
+                        // chamada da funçao que actualiza o saldo
+                    }).catch(error => {
+                        // Se houver algum erro na requisição, você pode tratá-lo aqui
+                        console.error('Erro ao fazer requisição:', error);
+                        setSuccessMessage('Erro ao inserir dados. Por favor, tente novamente.');
+                    });
+                // adiçao de saldo
+
+                // 
+
+
             } else {
                 console.warn("Resposta do servidor não indica sucesso:", response);
                 setSuccessMessage("Erro ao atualizar o valor. Por favor, tente novamente.");
@@ -104,7 +150,7 @@ export default function Poupancas() {
         // Função para buscar os dados da API
         const fetchData = async () => {
             try {
-                const response = await fetch('http://192.168.100.14:3001/getPoupancas');
+                const response = await fetch('http://192.168.100.11:3001/getPoupancas');
                 const json = await response.json();
                 setDadosBD(json);
             } catch (error) {

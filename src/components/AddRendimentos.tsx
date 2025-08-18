@@ -58,7 +58,7 @@ export default function AddRendimentos() {
       data: data2,
       idUsuario: id,
     };
-    Axios.post("http://192.168.100.14:3001/registoRendimento", dados)
+    Axios.post("http://192.168.100.11:3001/registoRendimento", dados)
       .then(response => {
         // Aqui dentro do bloco then, você tem acesso aos dados retornados pela requisição
         console.log('Dados enviados com sucesso:', response.data);
@@ -70,7 +70,7 @@ export default function AddRendimentos() {
           idActual: id,
 
         };
-        Axios.post("http://192.168.100.14:3001/pegarSaldo", dadosPS)
+        Axios.post("http://192.168.100.11:3001/pegarSaldo", dadosPS)
           .then(response => {
             // Aqui dentro do bloco then, você tem acesso aos dados retornados pela requisição
             const responseData = response.data;
@@ -82,9 +82,9 @@ export default function AddRendimentos() {
               // Seus dados para enviar no corpo da requisição POST
               idActual: id,
               novoValor: parseFloat(responseData[0].valor) +
-                parseFloat(valorRendimento.replace("R$", "").replace(".", "").replace(",", ".")),
+                parseFloat(valorRendimento.replace("R$", "").replace(/\./g, "").replace(",", ".")),
             };
-            Axios.post("http://192.168.100.14:3001/atualizarSaldo", dadosAS)
+            Axios.post("http://192.168.100.11:3001/atualizarSaldo", dadosAS)
               .then(response => {
                 // Aqui dentro do bloco then, você tem acesso aos dados retornados pela requisição
                 const responseData = response.data;
