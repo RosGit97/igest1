@@ -157,8 +157,12 @@ app.post("/registoGasto", (req, res) => {
 // });
 
 app.get('/getGastos', (req, res) => {
-    const sql = 'SELECT * FROM gastos';
-    db.query(sql, (err, results) => {
+
+    const valor = req.query.valor;
+    console.log("agora sima ",valor);
+
+    const sql = 'SELECT * FROM gastos WHERE idUsuario = ?';
+    db.query(sql, [valor], (err, results) => {
         if (err) {
             return res.status(500).send(err);
         }
@@ -186,8 +190,11 @@ app.post("/registoRendimento", (req, res) => {
 });
 
 app.get('/getRendimentos', (req, res) => {
-    const sql = 'SELECT * FROM rendimentos';
-    db.query(sql, (err, results) => {
+    
+    const valor = req.query.valor;
+    console.log("agora sim "+valor);
+    const sql = 'SELECT * FROM rendimentos WHERE idUsuario = ?';
+    db.query(sql,  [valor], (err, results) => {
         if (err) {
             return res.status(500).send(err);
         }
@@ -218,8 +225,12 @@ app.post("/registoPoupanca", (req, res) => {
 });
 
 app.get('/getPoupancas', (req, res) => {
-    const sql = 'SELECT * FROM poupancas';
-    db.query(sql, (err, results) => {
+
+    const valor = req.query.valor;
+    console.log("agora simm "+valor);
+
+    const sql = 'SELECT * FROM poupancas WHERE idUsuario = ?';
+    db.query(sql, [valor], (err, results) => {
         if (err) {
             return res.status(500).send(err);
         }
@@ -348,7 +359,7 @@ app.post("/atualizarSaldo", (req, res) => {
         
         console.log("Saldo atual:", result);
 
-        let SQL = "UPDATE poupancas SET valor = ? WHERE idUser = ?";
+        let SQL = "UPDATE saldo SET valor = ? WHERE idUser = ?";
 
         db.query(SQL, [novoValor, idActual], (err, result) => {
             if (err) {
