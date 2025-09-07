@@ -77,7 +77,7 @@ export default function AddPoupanca() {
       idUsuario: id,
       tipo_gasto: tipoGasto,
     };
-    Axios.post("http://192.168.100.11:3001/registoPoupanca", dados)
+    Axios.post("http://192.168.56.1:3001/registoPoupanca", dados)
       .then(response => {
         // Aqui dentro do bloco then, você tem acesso aos dados retornados pela requisição
         console.log('Dados enviados com sucesso:', response.data);

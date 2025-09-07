@@ -79,7 +79,7 @@ export default function Poupancas() {
 
         try {
             // Enviar os dados para o backend
-            const response = await Axios.post("http://192.168.100.11:3001/atualizarValorAtual", dados);
+            const response = await Axios.post("http://192.168.56.1:3001/atualizarValorAtual", dados);
 
             // Verificar se a resposta foi bem-sucedida
             if (response.status === 200) {
@@ -94,7 +94,7 @@ export default function Poupancas() {
                     idActual: id,
 
                 };
-                Axios.post("http://192.168.100.11:3001/pegarSaldo", dadosPS)
+                Axios.post("http://192.168.56.1:3001/pegarSaldo", dadosPS)
                     .then(response => {
                         // Aqui dentro do bloco then, você tem acesso aos dados retornados pela requisição
                         const responseData = response.data;
@@ -108,7 +108,7 @@ export default function Poupancas() {
                             novoValor: parseFloat(responseData[0].valor) -
                                 parseFloat(addedValue.replace("R$", "").replace(/\./g, "").replace(",", ".")),
                         };
-                        Axios.post("http://192.168.100.11:3001/atualizarSaldo", dadosAS)
+                        Axios.post("http://192.168.56.1:3001/atualizarSaldo", dadosAS)
                             .then(response => {
                                 // Aqui dentro do bloco then, você tem acesso aos dados retornados pela requisição
                                 const responseData = response.data;
@@ -150,7 +150,7 @@ export default function Poupancas() {
         // Função para buscar os dados da API
         const fetchData = async () => {
             try {
-                const response = await fetch(`http://192.168.100.11:3001/getPoupancas?valor=${id}`);
+                const response = await fetch(`http://192.168.56.1:3001/getPoupancas?valor=${id}`);
                 const json = await response.json();
                 setDadosBD(json);
             } catch (error) {

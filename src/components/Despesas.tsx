@@ -40,7 +40,7 @@ export default function Despesas() {
         // Função para buscar os dados da API
         const fetchData = async () => {
             try {
-                const response = await fetch(`http://192.168.100.11:3001/getGastos?valor=${id}`);
+                const response = await fetch(`http://192.168.56.1:3001/getGastos?valor=${id}`);
                 const json = await response.json();
                 setDadosBD(json);
             } catch (error) {
@@ -68,7 +68,7 @@ export default function Despesas() {
     // };
     const handleClickButton = () => {
 
-        Axios.get("http://192.168.100.11:3001/getGastos")
+        Axios.get("http://192.168.56.1:3001/getGastos")
             .then((res) => {
                 // console.log(res.data);
                 setDados(res.data)

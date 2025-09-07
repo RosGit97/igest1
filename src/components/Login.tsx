@@ -43,7 +43,7 @@ export default function Login() {
       password: password,
 
     };
-    // Axios.post('http://192.168.100.11:3001/loginUser', dados)
+    // Axios.post('http://192.168.56.1:3001/loginUser', dados)
     //   .then(response => {
     //     // Aqui dentro do bloco then, você tem acesso aos dados retornados pela requisição
     //     const responseData = response.data;
@@ -62,7 +62,7 @@ export default function Login() {
     //     alert('Erro ao conectar-se a base de dados!')
     //   });
 
-    Axios.post('http://192.168.100.11:3001/loginUser', dados)
+    Axios.post('http://192.168.56.1:3001/loginUser', dados)
     .then(response => {
         const responseData = response.data;
 

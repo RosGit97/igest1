@@ -38,7 +38,7 @@ export default function Rendimentos() {
 
         const fetchData = async () => {
             try {
-                const response = await fetch(`http://192.168.100.11:3001/getRendimentos?valor=${id}`);
+                const response = await fetch(`http://192.168.56.1:3001/getRendimentos?valor=${id}`);
                 const json = await response.json();
                 setDadosBD(json);
             } catch (error) {
@@ -134,8 +134,8 @@ export default function Rendimentos() {
                                 {selectedItem && (
                                     <>
                                         <Text style={styles.modalTitle}>Detalhes</Text>
-                                        <Text >Fonte: {selectedItem.fonte_rendimento}</Text>
-                                        <Text >Valor: {selectedItem.valor}</Text>
+                                        <Text>Fonte: {selectedItem.fonte_rendimento}</Text>
+                                        <Text>Valor: {selectedItem.valor}</Text>
                                         <Text>nome: {selectedItem.idUsuario}</Text>
                                         <Text>Data: {selectedItem.data}</Text>
                                     </>

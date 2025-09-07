@@ -43,7 +43,7 @@ export default function CadastroFamilia() {
             endereco: endereco,
 
         };
-        Axios.post("http://192.168.100.11:3001/registoFamilia", dados)
+        Axios.post("http://192.168.56.1:3001/registoFamilia", dados)
             .then(response => {
                 // Aqui dentro do bloco then, você tem acesso aos dados retornados pela requisição
                 console.log('Dados enviados com sucesso:', response.data);
@@ -54,7 +54,7 @@ export default function CadastroFamilia() {
                     id: response.data.id,
                     
                 };
-                Axios.post("http://192.168.100.11:3001/criarSaldo", dados1)
+                Axios.post("http://192.168.56.1:3001/criarSaldo", dados1)
                     .then(response1 => {
                         // Aqui dentro do bloco then, você tem acesso aos dados retornados pela requisição
                         console.log('saldo criado:', response1.data);
