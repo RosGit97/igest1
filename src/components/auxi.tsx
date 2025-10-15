@@ -18,6 +18,7 @@ import VGrafico from "./VGrafico";
 import AddRendimentos from "./AddRendimentos";
 import AddPoupanca from "./AddPoupanca";
 import CadastroFamilia from "./CadastroFamilia";
+import AddMembro from "./AddMembro";
 
 export default function Auxi( ) {
 
@@ -84,6 +85,11 @@ export default function Auxi( ) {
                 <Stack.Screen
                     name="AddPoupanca"
                     component={AddPoupanca}
+                    options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                    name="AddMembro"
+                    component={AddMembro}
                     options={{ headerShown: false }}
                 />
             </Stack.Navigator>

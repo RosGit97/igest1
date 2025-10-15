@@ -13,6 +13,7 @@ export type propsNavigationStack = {
     AddGasto: undefined
     AddRendimentos:undefined
     AddPoupanca:undefined
+    AddMembro:undefined
 }
 
 export type propsStack = NativeStackNavigationProp<propsNavigationStack>

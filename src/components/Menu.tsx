@@ -190,7 +190,7 @@ export default function Menu() {
 
         };
 
-        Axios.post("http://192.168.56.1:3001/procuraNomeFamilia", dados)
+        Axios.post("http://192.168.100.9:3001/procuraNomeFamilia", dados)
             .then(response => {
                 const responseData = response.data;
                 // Aqui dentro do bloco then, você tem acesso aos dados retornados pela requisição
@@ -210,7 +210,7 @@ export default function Menu() {
     //     // Função para buscar os dados da API 
     //     const fetchData = async () => {
     //         try {
-    //             const response = await fetch('http://192.168.56.1:3001/pegarSaldo');
+    //             const response = await fetch('http://192.168.100.9:3001/pegarSaldo');
     //             const json = await response.json();
     //             setSaldo(json);
     //             console.error('Erro ao buscar dados:hbh');
@@ -230,7 +230,7 @@ export default function Menu() {
 
         };
 
-        Axios.post("http://192.168.56.1:3001/pegarSaldo", dados)
+        Axios.post("http://192.168.100.9:3001/pegarSaldo", dados)
             .then(response => {
                 const responseData = response.data;
                 // Aqui dentro do bloco then, você tem acesso aos dados retornados pela requisição
@@ -252,7 +252,7 @@ export default function Menu() {
     // testando
     const fetchData = async () => {
         try {
-            const response = await fetch(`http://192.168.56.1:3001/getGastos?valor=${idActual}`);
+            const response = await fetch(`http://192.168.100.9:3001/getGastos?valor=${idActual}`);
             const json = await response.json();
             setDadosBD(json);
 
@@ -287,7 +287,7 @@ export default function Menu() {
 
     const fetchData1 = async () => {
         try {
-            const response = await fetch(`http://192.168.56.1:3001/getRendimentos?valor=${idActual}`);
+            const response = await fetch(`http://192.168.100.9:3001/getRendimentos?valor=${idActual}`);
             const json1 = await response.json();
             setDadosBDR(json1);
 
@@ -407,7 +407,7 @@ export default function Menu() {
 
             // const fetchData = async () => {
             //     try {
-            //         const response = await fetch(`http://192.168.56.1:3001/getGastos?valor=${id}`);
+            //         const response = await fetch(`http://192.168.100.9:3001/getGastos?valor=${id}`);
             //         const json = await response.json();
             //         setDadosBD(json);
 
@@ -445,7 +445,7 @@ export default function Menu() {
 
             // const fetchData1 = async () => {
             //     try {
-            //         const response = await fetch(`http://192.168.56.1:3001/getRendimentos?valor=${id}`);
+            //         const response = await fetch(`http://192.168.100.9:3001/getRendimentos?valor=${id}`);
             //         const json1 = await response.json();
             //         setDadosBDR(json1);
 
@@ -606,7 +606,7 @@ export default function Menu() {
 
     useEffect(() => {
         // Função para buscar os dados da API 
-        
+
         pegarSaldo();
         if (totalRendimento && totalGasto) {
             console.log("renda total = " + totalRendimento + " id =" + idActual);
@@ -842,9 +842,12 @@ export default function Menu() {
                 </View>
 
                 {/* Exemplo: menu extra quando clica no botão central */}
-                {open && (
+                {open1 && (
                     <View style={styles.extraMenu}>
-                        <TouchableOpacity style={styles.extraItem}>
+                        <TouchableOpacity
+                            style={styles.extraItem}
+                            onPress={() => navigation.navigate('AddMembro',{idFamilia: idFamilia})}
+                        >
                             <Text style={styles.extraText}>
                                 <Icon name="person-add-outline" size={24} color="#222" /> Adicionar membro</Text>
                         </TouchableOpacity>

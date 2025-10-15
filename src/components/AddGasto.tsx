@@ -77,7 +77,7 @@ export default function AddGasto() {
       tipo_gasto: tipoGasto,
       idUsuario: id,
     };
-    Axios.post("http://192.168.56.1:3001/registoGasto", dados)
+    Axios.post("http://192.168.100.9:3001/registoGasto", dados)
       .then(response => {
         // Aqui dentro do bloco then, você tem acesso aos dados retornados pela requisição
         console.log('Dados enviados com sucesso:', response.data);
@@ -92,7 +92,7 @@ export default function AddGasto() {
           idActual: id,
 
         };
-        Axios.post("http://192.168.56.1:3001/pegarSaldo", dadosPS)
+        Axios.post("http://192.168.100.9:3001/pegarSaldo", dadosPS)
           .then(response => {
             // Aqui dentro do bloco then, você tem acesso aos dados retornados pela requisição
             const responseData = response.data;
@@ -106,7 +106,7 @@ export default function AddGasto() {
               novoValor: parseFloat(responseData[0].valor) -
                 parseFloat(valorGasto.replace("R$", "").replace(/\./g, "").replace(",", ".")),
             };
-            Axios.post("http://192.168.56.1:3001/atualizarSaldo", dadosAS)
+            Axios.post("http://192.168.100.9:3001/atualizarSaldo", dadosAS)
               .then(response => {
                 // Aqui dentro do bloco then, você tem acesso aos dados retornados pela requisição
                 const responseData = response.data;
