@@ -14,6 +14,7 @@ export type propsNavigationStack = {
     AddRendimentos:undefined
     AddPoupanca:undefined
     AddMembro:undefined
+    Previsao:undefined
 }
 
 export type propsStack = NativeStackNavigationProp<propsNavigationStack>

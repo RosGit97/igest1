@@ -190,7 +190,7 @@ export default function Menu() {
 
         };
 
-        Axios.post("http://192.168.100.9:3001/procuraNomeFamilia", dados)
+        Axios.post("http://192.168.100.6:3001/procuraNomeFamilia", dados)
             .then(response => {
                 const responseData = response.data;
                 // Aqui dentro do bloco then, você tem acesso aos dados retornados pela requisição
@@ -210,7 +210,7 @@ export default function Menu() {
     //     // Função para buscar os dados da API 
     //     const fetchData = async () => {
     //         try {
-    //             const response = await fetch('http://192.168.100.9:3001/pegarSaldo');
+    //             const response = await fetch('http://192.168.100.6:3001/pegarSaldo');
     //             const json = await response.json();
     //             setSaldo(json);
     //             console.error('Erro ao buscar dados:hbh');
@@ -230,13 +230,13 @@ export default function Menu() {
 
         };
 
-        Axios.post("http://192.168.100.9:3001/pegarSaldo", dados)
+        Axios.post("http://192.168.100.6:3001/pegarSaldo", dados)
             .then(response => {
                 const responseData = response.data;
                 // Aqui dentro do bloco then, você tem acesso aos dados retornados pela requisição
                 // console.log('sucesso:', responseData[0].valor);
                 // console.log('sucesso id:', idActual);
-                setSaldo(responseData[0].valor);
+                setSaldo(responseData[0].valor.toFixed(2));
                 // setNomeFamilia(responseData[0].nomeFamilia);
                 // alert('você mudou para o perfil de familia ');
             }).catch(error => {
@@ -252,7 +252,7 @@ export default function Menu() {
     // testando
     const fetchData = async () => {
         try {
-            const response = await fetch(`http://192.168.100.9:3001/getGastos?valor=${idActual}`);
+            const response = await fetch(`http://192.168.100.6:3001/getGastos?valor=${idActual}`);
             const json = await response.json();
             setDadosBD(json);
 
@@ -287,7 +287,7 @@ export default function Menu() {
 
     const fetchData1 = async () => {
         try {
-            const response = await fetch(`http://192.168.100.9:3001/getRendimentos?valor=${idActual}`);
+            const response = await fetch(`http://192.168.100.6:3001/getRendimentos?valor=${idActual}`);
             const json1 = await response.json();
             setDadosBDR(json1);
 
@@ -407,7 +407,7 @@ export default function Menu() {
 
             // const fetchData = async () => {
             //     try {
-            //         const response = await fetch(`http://192.168.100.9:3001/getGastos?valor=${id}`);
+            //         const response = await fetch(`http://192.168.100.6:3001/getGastos?valor=${id}`);
             //         const json = await response.json();
             //         setDadosBD(json);
 
@@ -445,7 +445,7 @@ export default function Menu() {
 
             // const fetchData1 = async () => {
             //     try {
-            //         const response = await fetch(`http://192.168.100.9:3001/getRendimentos?valor=${id}`);
+            //         const response = await fetch(`http://192.168.100.6:3001/getRendimentos?valor=${id}`);
             //         const json1 = await response.json();
             //         setDadosBDR(json1);
 
@@ -810,7 +810,10 @@ export default function Menu() {
             <View style={styles.containerFooter}>
                 {/* Menu */}
                 <View style={styles.tabBar}>
-                    <TouchableOpacity style={styles.tabItem}>
+                    <TouchableOpacity
+                        style={styles.tabItem}
+                        onPress={() => navigation.navigate('Previsao',{id: idActual})}
+                        >
 
                         <Foundation name="graph-trend" color="#222" size={24} />
                         <Text style={{ fontSize: 12 }}>Previsões</Text>
@@ -846,15 +849,15 @@ export default function Menu() {
                     <View style={styles.extraMenu}>
                         <TouchableOpacity
                             style={styles.extraItem}
-                            onPress={() => navigation.navigate('AddMembro',{idFamilia: idFamilia})}
+                            onPress={() => navigation.navigate('AddMembro', { idFamilia: idFamilia })}
                         >
                             <Text style={styles.extraText}>
                                 <Icon name="person-add-outline" size={24} color="#222" /> Adicionar membro</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.extraItem}>
+                        {/* <TouchableOpacity style={styles.extraItem}>
                             <Text style={styles.extraText}>
                                 <Icon name="person-remove-outline" size={24} color="#222" /> remover membro</Text>
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                     </View>
                 )}
 

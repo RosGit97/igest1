@@ -12,6 +12,7 @@ export type RootStackParamList = {
     Poupancas: { userName: string, id: number };
     AddPoupanca: { userName: string, id: number };
     AddMembro: {idFamilia: number };
+    Previsao: {id: number};
     // Adicione outros parâmetros para outras telas conforme necessário
   };
   

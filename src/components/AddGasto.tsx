@@ -32,9 +32,14 @@ export default function AddGasto() {
   const [date, setDate] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
 
-  const dia = date.getDate(); // Obtem o dia do mês (1-31)
-  const mes = date.getMonth() + 1; // Obtem o mês (0-11), adicionamos 1 para obter o mês de 1 a 12
-  const ano = date.getFullYear(); // Obtem o ano com quatro dígitos
+  // const dia = date.getDate(); // Obtem o dia do mês (1-31)
+  // const mes = date.getMonth() + 1; // Obtem o mês (0-11), adicionamos 1 para obter o mês de 1 a 12
+  // const ano = date.getFullYear(); // Obtem o ano com quatro dígitos
+
+  const dia = String(date.getDate()).padStart(2, "0");      // 01 → 09, 10 → 31
+  const mes = String(date.getMonth() + 1).padStart(2, "0"); // 01 → 12
+  const ano = date.getFullYear();
+
   const [successMessage, setSuccessMessage] = useState('');
 
   const route = useRoute<AddGastoScreenRouteProp>();
@@ -73,11 +78,11 @@ export default function AddGasto() {
       categoria: categoria,
       nomeGasto: nomeGasto,
       valorGasto: valorGasto.replace("R$", "").replace(".", "").replace(",", "."),
-      dataGasto: dia+"/"+mes+"/"+ano,
+      dataGasto: dia + "/" + mes + "/" + ano,
       tipo_gasto: tipoGasto,
       idUsuario: id,
     };
-    Axios.post("http://192.168.100.9:3001/registoGasto", dados)
+    Axios.post("http://192.168.100.6:3001/registoGasto", dados)
       .then(response => {
         // Aqui dentro do bloco then, você tem acesso aos dados retornados pela requisição
         console.log('Dados enviados com sucesso:', response.data);
@@ -92,7 +97,7 @@ export default function AddGasto() {
           idActual: id,
 
         };
-        Axios.post("http://192.168.100.9:3001/pegarSaldo", dadosPS)
+        Axios.post("http://192.168.100.6:3001/pegarSaldo", dadosPS)
           .then(response => {
             // Aqui dentro do bloco then, você tem acesso aos dados retornados pela requisição
             const responseData = response.data;
@@ -106,7 +111,7 @@ export default function AddGasto() {
               novoValor: parseFloat(responseData[0].valor) -
                 parseFloat(valorGasto.replace("R$", "").replace(/\./g, "").replace(",", ".")),
             };
-            Axios.post("http://192.168.100.9:3001/atualizarSaldo", dadosAS)
+            Axios.post("http://192.168.100.6:3001/atualizarSaldo", dadosAS)
               .then(response => {
                 // Aqui dentro do bloco then, você tem acesso aos dados retornados pela requisição
                 const responseData = response.data;
@@ -280,7 +285,7 @@ export default function AddGasto() {
             } else {
               double();
               navigation.navigate('Despesas', { userName: userName, id: id })
-              
+
               alert("gasto registado!" + valorGasto);
             }
 

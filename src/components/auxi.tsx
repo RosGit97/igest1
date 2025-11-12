@@ -19,6 +19,7 @@ import AddRendimentos from "./AddRendimentos";
 import AddPoupanca from "./AddPoupanca";
 import CadastroFamilia from "./CadastroFamilia";
 import AddMembro from "./AddMembro";
+import Previsao from "./Previsao";
 
 export default function Auxi( ) {
 
@@ -90,6 +91,11 @@ export default function Auxi( ) {
                 <Stack.Screen
                     name="AddMembro"
                     component={AddMembro}
+                    options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                    name="Previsao"
+                    component={Previsao}
                     options={{ headerShown: false }}
                 />
             </Stack.Navigator>

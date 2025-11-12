@@ -38,7 +38,7 @@ export default function Rendimentos() {
 
         const fetchData = async () => {
             try {
-                const response = await fetch(`http://192.168.100.9:3001/getRendimentos?valor=${id}`);
+                const response = await fetch(`http://192.168.100.6:3001/getRendimentos?valor=${id}`);
                 const json = await response.json();
                 setDadosBD(json);
             } catch (error) {
