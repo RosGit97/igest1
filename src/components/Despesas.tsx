@@ -10,6 +10,8 @@ import { RootStackParamList } from "./types";
 import { propsStack } from ".";
 import PieChart from 'react-native-pie-chart';
 import Axios from "axios";
+import { useFocusEffect } from '@react-navigation/native';
+import { useCallback } from 'react';
 const Stack = createStackNavigator();
 type DespesasScreenRouteProp = RouteProp<RootStackParamList, 'Despesas'>;
 type DespesasScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Despesas'>;
@@ -36,9 +38,11 @@ export default function Despesas() {
     const [modalVisible, setModalVisible] = useState(false);
     const [selectedItem, setSelectedItem] = useState<DadosBD | null>(null);
 
-    useEffect(() => {
-        // Função para buscar os dados da API
-        const fetchData = async () => {
+
+
+    useFocusEffect(
+        useCallback(() => {
+            const fetchData = async () => {
             try {
                 const response = await fetch(`http://192.168.100.6:3001/getGastos?valor=${id}`);
                 const json = await response.json();
@@ -49,7 +53,24 @@ export default function Despesas() {
         };
 
         fetchData();
-    }, []);
+
+        }, [])
+    );
+
+    // useEffect(() => {
+    //     // Função para buscar os dados da API
+    //     const fetchData = async () => {
+    //         try {
+    //             const response = await fetch(`http://192.168.100.6:3001/getGastos?valor=${id}`);
+    //             const json = await response.json();
+    //             setDadosBD(json);
+    //         } catch (error) {
+    //             console.error('Erro ao buscar dados:', error);
+    //         }
+    //     };
+
+    //     fetchData();
+    // }, []);
 
 
     const [fontLoaded] = useFonts({ Frijole_400Regular, Fruktur_400Regular });

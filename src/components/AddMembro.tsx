@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Pressable, ImageBackground, Dimensions } from 'react-native';
 import { propsStack } from ".";
+import { Picker } from '@react-native-picker/picker';
 import Axios from "axios";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -34,8 +35,9 @@ export default function AddMembro() {
   const ano = date.getFullYear(); // Obtem o ano com quatro dígitos
 
   const { height } = Dimensions.get('window');
-
-
+  // ggfff
+  const [membro, setMembro] = useState('');
+  // ggfff
   const [isFocused, setIsFocused] = useState(false);
   const [isFocused2, setIsFocused2] = useState(false);
   const [isFocused3, setIsFocused3] = useState(false);
@@ -55,79 +57,122 @@ export default function AddMembro() {
   const handleBlur6 = () => setIsFocused6(false);
   const handleFocus6 = () => setIsFocused6(true);
   const [showPicker, setShowPicker] = useState(false);
-  const handleClickButton = () => {
-
-
+  const handleClickButton = async () => {
+  try {
     const dados = {
-      // Seus dados para enviar no corpo da requisição POST
-      id: id,
-      nome: nome,
-      sobrenome: sobrenome,
-      nascimento: dia + "/" + mes + "/" + ano,
-      password: password,
+      id,
+      nome,
+      sobrenome,
+      nascimento: `${dia}/${mes}/${ano}`,
+      password,
       idFamilia: idFamily,
+      parentesco: membro,
     };
 
-    Axios.post("http://192.168.100.6:3001/procuraIdFamilia", dados)
-      .then(response => {
-        const responseData = response.data;
-        // Aqui dentro do bloco then, você tem acesso aos dados retornados pela requisição
-        console.log('Familia verificada:', response.data);
+    // ⚠️ Verifica se o parentesco foi selecionado
+    if (!membro) {
+      alert("Selecione o parentesco antes de continuar!");
+      return;
+    }
 
-        setSuccessMessage('Inserção de dados feita com sucesso!');
+    // 🔹 1. Verificar se a família existe
+    const response = await Axios.post("http://192.168.100.6:3001/procuraIdFamilia", dados);
+    console.log("Família verificada:", response.data);
 
-        // if (response.data.id == idFamilia) {
+    // 🔹 2. Inserir o utilizador
+    const responseUser = await Axios.post("http://192.168.100.6:3001/registoUser", dados);
+    console.log("Dados do utilizador enviados:", responseUser.data);
+    alert("Inserção de dados feita com sucesso!");
+    setSuccessMessage("Inserção de dados feita com sucesso!");
 
-          Axios.post("http://192.168.100.6:3001/registoUser", dados)
-            .then(response1 => {
-              // Aqui dentro do bloco then, você tem acesso aos dados retornados pela requisição
-              console.log('Dados enviados com sucesso:', response1.data);
-              setSuccessMessage('Inserção de dados feita com sucesso!');
-              alert('Inserção de dados feita com sucesso!')
-              navigation.goBack();
+    // 🔹 3. Criar o saldo para o novo utilizador
+    const dadosSaldo = { id: dados.id };
+    const responseSaldo = await Axios.post("http://192.168.100.6:3001/criarSaldo", dadosSaldo);
+    console.log("Saldo criado:", responseSaldo.data);
 
-              // 
-              const dados1 = {
-                // Seus dados para enviar no corpo da requisição POST
-                id: dados.id,
+    alert(`Saldo criado com sucesso! ID: ${responseSaldo.data.id}`);
+    navigation.goBack();
 
-              };
-              Axios.post("http://192.168.100.6:3001/criarSaldo", dados1)
-                .then(response1 => {
-                  // Aqui dentro do bloco then, você tem acesso aos dados retornados pela requisição
-                  console.log('saldo criado:', response1.data);
-                  setSuccessMessage('Inserção de dados feita com sucesso sald!');
-                  alert('Inserção de dados feita com sucesso! O seu id de familia é saldo' + response1.data.id + '.')
+  } catch (error) {
+    console.error("Erro ao inserir dados:", error);
+    alert("Não foi possível inserir os dados. Por favor, tente novamente!");
+  }
+};
 
-                }).catch(error => {
-                  // Se houver algum erro na requisição, você pode tratá-lo aqui
-                  alert('Não foi possível inserir os dados. Por favor, tente novamente saldo!')
-                });
-              // 
+  // const handleClickButton = async () => {
 
-            }).catch(error => {
-              // Se houver algum erro na requisição, você pode tratá-lo aqui
-              alert('Não foi possível inserir os dados. Por favor, tente novamente!1')
-            });
-        // }
-      }).catch(error => {
-        // Se houver algum erro na requisição, você pode tratá-lo aqui
-        alert("erro")
-      });
+    
+  //   const dados = {
+  //     // Seus dados para enviar no corpo da requisição POST
+  //     id: id,
+  //     nome: nome,
+  //     sobrenome: sobrenome,
+  //     nascimento: dia + "/" + mes + "/" + ano,
+  //     password: password,
+  //     idFamilia: idFamily,
+  //     parentesco: membro,
+  //   };
+
+  //   const response = await Axios.post("http://192.168.100.6:3001/procuraIdFamilia", dados)
+  //     .then(response => {
+  //       const responseData = response.data;
+  //       // Aqui dentro do bloco then, você tem acesso aos dados retornados pela requisição
+  //       console.log('Familia verificada:', response.data);
+
+  //       setSuccessMessage('Inserção de dados feita com sucesso!');
+
+  //       // if (response.data.id == idFamilia) {
+
+  //       Axios.post("http://192.168.100.6:3001/registoUser", dados)
+  //         .then(response1 => {
+  //           // Aqui dentro do bloco then, você tem acesso aos dados retornados pela requisição
+  //           console.log('Dados enviados com sucesso:', response1.data);
+  //           setSuccessMessage('Inserção de dados feita com sucesso!');
+  //           alert('Inserção de dados feita com sucesso!')
+  //           navigation.goBack();
+
+  //           // 
+  //           const dados1 = {
+  //             // Seus dados para enviar no corpo da requisição POST
+  //             id: dados.id,
+
+  //           };
+  //           Axios.post("http://192.168.100.6:3001/criarSaldo", dados1)
+  //             .then(response1 => {
+  //               // Aqui dentro do bloco then, você tem acesso aos dados retornados pela requisição
+  //               console.log('saldo criado:', response1.data);
+  //               setSuccessMessage('Inserção de dados feita com sucesso sald!');
+  //               alert('Inserção de dados feita com sucesso! O seu id de familia é saldo' + response1.data.id + '.')
+
+  //             }).catch(error => {
+  //               // Se houver algum erro na requisição, você pode tratá-lo aqui
+  //               alert('Não foi possível inserir os dados. Por favor, tente novamente saldo!')
+  //             });
+  //           // 
+
+  //         }).catch(error => {
+  //           // Se houver algum erro na requisição, você pode tratá-lo aqui
+  //           alert('Não foi possível inserir os dados. Por favor, tente novamente!1')
+  //         });
+  //       // }
+  //     }).catch(error => {
+  //       // Se houver algum erro na requisição, você pode tratá-lo aqui
+  //       alert("erro")
+  //     });
 
 
-    // Axios.post("http://192.168.100.6:3001/registoUser", dados)
-    //   .then(response => {
-    //     // Aqui dentro do bloco then, você tem acesso aos dados retornados pela requisição
-    //     console.log('Dados enviados com sucesso:', response.data);
-    //     setSuccessMessage('Inserção de dados feita com sucesso!');
-    //     alert('Inserção de dados feita com sucesso!')
-    //   }).catch(error => {
-    //     // Se houver algum erro na requisição, você pode tratá-lo aqui
-    //     alert('Não foi possível inserir os dados. Por favor, tente novamente!')
-    //   });
+  //   // Axios.post("http://192.168.100.6:3001/registoUser", dados)
+  //   //   .then(response => {
+  //   //     // Aqui dentro do bloco then, você tem acesso aos dados retornados pela requisição
+  //   //     console.log('Dados enviados com sucesso:', response.data);
+  //   //     setSuccessMessage('Inserção de dados feita com sucesso!');
+  //   //     alert('Inserção de dados feita com sucesso!')
+  //   //   }).catch(error => {
+  //   //     // Se houver algum erro na requisição, você pode tratá-lo aqui
+  //   //     alert('Não foi possível inserir os dados. Por favor, tente novamente!')
+  //   //   });
 
-  };
+  // };
 
   function double() {
     handleClickButton();
@@ -302,11 +347,28 @@ export default function AddMembro() {
             ></TextInput>
           </View>
 
+          <View style={[styles.textInput, { borderColor: isFocused5 ? '#00f' : '#ccc' }]}>
+            {/* <Text>Selecione o membro da família:</Text> */}
+            <Picker
+              selectedValue={membro}
+              onValueChange={(valor) => setMembro(valor)}
+            
+              style={{ height: 50, width: 200, marginTop: -3 }}
+            >
+              <Picker.Item label="Parentesco" value="" />
+              <Picker.Item label="Mãe" value="mae" />
+              <Picker.Item label="Pai" value="pai" />
+              <Picker.Item label="Filho" value="filho" />
+            </Picker>
+
+            {/* {membro ? <Text>Membro selecionado: {membro}</Text> : null} */}
+          </View>
+
           <TouchableOpacity
             style={styles.button}
             onPress={
               () => {
-                if (!nome.replaceAll(" ", "") || !sobrenome.replaceAll(" ", "") || !password.replaceAll(" ", "")) {
+                if (!membro.replaceAll(" ", "") || !nome.replaceAll(" ", "") || !sobrenome.replaceAll(" ", "") || !password.replaceAll(" ", "")) {
                   alert("preencha todos campos!");
                 } else {
                   if (password == password1) {

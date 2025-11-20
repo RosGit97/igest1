@@ -399,6 +399,8 @@ export default function Menu() {
     useFocusEffect(
         useCallback(() => {
             // Função que recarrega o saldo
+
+             pegarSaldo();
             // if (idActual) {
 
             //     pegarSaldo();
@@ -537,7 +539,7 @@ export default function Menu() {
             // console.log("entrou");
             // checkPercent();
 
-        }, [idActual])
+        }, [])
     );
     // funcões chamadas logo que a pagina é carregada (open)
     useEffect(() => {
@@ -551,11 +553,11 @@ export default function Menu() {
             pegarSaldo();
             // cconsole.log('sucesso id use:', idActual);
         }
+        
 
         fetchData();
 
         fetchData1();
-
 
 
         // 

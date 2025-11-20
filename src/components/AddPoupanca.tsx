@@ -27,6 +27,7 @@ export default function AddPoupanca() {
   const [valorMensal, setValorMensal] = useState("");
   const [valorMensalReal, setValorMensalReal] = useState(0);
   const [valorPrevistoReal, setValorPrevistoReal] = useState(0);
+  const [tempoPoupancaReal, setTempoPoupancaReal] = useState(0);
   const [dataPoupanca, setDataPoupanca] = useState("");
 
   const [tipoGasto, setTipoGasto] = useState("");
@@ -114,11 +115,13 @@ export default function AddPoupanca() {
         style={styles.textInput}
         onChangeText={(text) => setObjectivo(text)}
       ></TextInput>
+
       <TextInput
-        placeholder="Em quanto tempo pretende alcançar esse objectivo?"
+        placeholder="Em quanto tempo pretende alcançar esse objectivo? em meses!"
         style={styles.textInput}
-        onChangeText={(text) => setTempoPoupanca(text)}
-      ></TextInput>
+        keyboardType="numeric"
+        onChangeText={(text) => { setTempoPoupanca(text); setTempoPoupancaReal(Number) }}
+      />
 
       {/* <TextInputMask
         type={'money'}
@@ -275,9 +278,15 @@ export default function AddPoupanca() {
               !valorMensal.replaceAll(" ", "") || !date) {
               alert("Preencha todos campos!");
             } else {
-              double();
-              navigation.navigate('Poupancas', { userName: userName, id: id })
-              alert("Poupança criada com sucesso!");
+              console.log(tempoPoupancaReal);
+              if (valorPrevistoReal / valorMensalReal == parseInt(tempoPoupanca)) {
+                double();
+                navigation.navigate('Poupancas', { userName: userName, id: id })
+                alert("Poupança criada com sucesso!");
+              }else{
+                alert("não é possivel completar o valor neste periodo!");
+              }
+
             }
 
           }
@@ -310,7 +319,7 @@ const styles = StyleSheet.create({
 
   textInput: {
     width: '80%',
-    height: 50,
+    height: 60,
 
     borderBottomWidth: 0.5,
     borderBottomColor: '#C0C0C0',

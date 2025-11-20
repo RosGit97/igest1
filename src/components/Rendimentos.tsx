@@ -8,7 +8,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from "./types";
 import { propsStack } from ".";
-
+import { useFocusEffect } from '@react-navigation/native';
+import { useCallback } from 'react';
 
 const Stack = createStackNavigator();
 type RendimentosScreenRouteProp = RouteProp<RootStackParamList, 'Rendimentos'>;
@@ -33,21 +34,40 @@ export default function Rendimentos() {
     const [modalVisible, setModalVisible] = useState(false);
     const [selectedItem, setSelectedItem] = useState<DadosBD | null>(null);
 
-    useEffect(() => {
-        // Função para buscar os dados da API
+    useFocusEffect(
+        useCallback(() => {
+            // Função que recarrega o saldo
+            // Função para buscar os dados da API
 
-        const fetchData = async () => {
-            try {
-                const response = await fetch(`http://192.168.100.6:3001/getRendimentos?valor=${id}`);
-                const json = await response.json();
-                setDadosBD(json);
-            } catch (error) {
-                console.error('Erro ao buscar dados:', error);
-            }
-        };
+            const fetchData = async () => {
+                try {
+                    const response = await fetch(`http://192.168.100.6:3001/getRendimentos?valor=${id}`);
+                    const json = await response.json();
+                    setDadosBD(json);
+                } catch (error) {
+                    console.error('Erro ao buscar dados:', error);
+                }
+            };
 
-        fetchData();
-    }, []);
+            fetchData();
+
+        }, [])
+    );
+    // useEffect(() => {
+    //     // Função para buscar os dados da API
+
+    //     const fetchData = async () => {
+    //         try {
+    //             const response = await fetch(`http://192.168.100.6:3001/getRendimentos?valor=${id}`);
+    //             const json = await response.json();
+    //             setDadosBD(json);
+    //         } catch (error) {
+    //             console.error('Erro ao buscar dados:', error);
+    //         }
+    //     };
+
+    //     fetchData();
+    // }, []);
 
     if (!fontLoaded) {
         return null;

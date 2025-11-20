@@ -10,6 +10,7 @@ import Axios from "axios";
 import RNPickerSelect from 'react-native-picker-select';
 import DateTimePicker from "@react-native-community/datetimepicker"
 import { TextInputMask } from 'react-native-masked-text';
+import { Picker } from '@react-native-picker/picker';
 
 const Stack = createStackNavigator();
 type AddGastoScreenRouteProp = RouteProp<RootStackParamList, 'AddGasto'>;
@@ -159,11 +160,27 @@ export default function AddGasto() {
         }} />
       <Text style={styles.text}>Registo de despesa</Text>
 
-      <TextInput
+      {/* <TextInput
         placeholder="categoria"
         style={styles.textInput}
         onChangeText={(text) => setCategoria(text)}
-      ></TextInput>
+      ></TextInput> */}
+      <Picker
+        selectedValue={categoria}
+        style={styles.textInput}
+        onValueChange={(itemValue) => setCategoria(itemValue)}
+      >
+        <Picker.Item label="Selecione a categoria" value="" />
+        <Picker.Item label="Alimentação" value="Alimentação" />
+        <Picker.Item label="Transporte" value="Transporte" />
+        <Picker.Item label="Educação" value="Educação" />
+        <Picker.Item label="Saúde" value="Saúde" />
+        <Picker.Item label="Lazer" value="Lazer" />
+        <Picker.Item label="Financeiro" value="Financeiro" />
+        <Picker.Item label="Compras pessoais" value="Compras pessoais" />
+        <Picker.Item label="Família/Casa" value="Família/Casa" />
+        <Picker.Item label="Imprevistos" value="Imprevistos" />
+      </Picker>
       <TextInput
         placeholder="o que comprou?"
         style={styles.textInput}

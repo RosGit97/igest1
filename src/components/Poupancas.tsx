@@ -10,7 +10,8 @@ import { RootStackParamList } from "./types";
 import { propsStack } from ".";
 import Axios from "axios";
 import { ProgressBar } from 'react-native-paper';
-
+import { useFocusEffect } from '@react-navigation/native';
+import { useCallback } from 'react';
 
 const Stack = createStackNavigator();
 type AddPoupancasScreenRouteProp = RouteProp<RootStackParamList, 'Poupancas'>;
@@ -145,21 +146,38 @@ export default function Poupancas() {
     };
 
 
+    useFocusEffect(
+        useCallback(() => {
+        
+            // Função para buscar os dados da API
+            const fetchData = async () => {
+                try {
+                    const response = await fetch(`http://192.168.100.6:3001/getPoupancas?valor=${id}`);
+                    const json = await response.json();
+                    setDadosBD(json);
+                } catch (error) {
+                    console.error('Erro ao buscar dados:', error);
+                }
+            };
 
-    useEffect(() => {
-        // Função para buscar os dados da API
-        const fetchData = async () => {
-            try {
-                const response = await fetch(`http://192.168.100.6:3001/getPoupancas?valor=${id}`);
-                const json = await response.json();
-                setDadosBD(json);
-            } catch (error) {
-                console.error('Erro ao buscar dados:', error);
-            }
-        };
+            fetchData();
 
-        fetchData();
-    }, []);
+        }, [])
+    );
+    // useEffect(() => {
+    //     // Função para buscar os dados da API
+    //     const fetchData = async () => {
+    //         try {
+    //             const response = await fetch(`http://192.168.100.6:3001/getPoupancas?valor=${id}`);
+    //             const json = await response.json();
+    //             setDadosBD(json);
+    //         } catch (error) {
+    //             console.error('Erro ao buscar dados:', error);
+    //         }
+    //     };
+
+    //     fetchData();
+    // }, []);
 
 
     if (!fontLoaded) {

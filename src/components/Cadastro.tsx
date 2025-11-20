@@ -6,6 +6,7 @@ import { propsStack } from ".";
 import Axios from "axios";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { Picker } from '@react-native-picker/picker';
 
 export default function Cadastro() {
   const navigation = useNavigation<propsStack>();
@@ -27,8 +28,12 @@ export default function Cadastro() {
 
   const { height } = Dimensions.get('window');
 
+// ggfff
+  const [membro, setMembro] = useState('');
+  // ggfff
 
   const [isFocused, setIsFocused] = useState(false);
+  const [isFocused1, setIsFocused1] = useState(false);
   const [isFocused2, setIsFocused2] = useState(false);
   const [isFocused3, setIsFocused3] = useState(false);
   const [isFocused4, setIsFocused4] = useState(false);
@@ -36,6 +41,8 @@ export default function Cadastro() {
   const [isFocused6, setIsFocused6] = useState(false);
   const handleFocus = () => setIsFocused(true);
   const handleBlur = () => setIsFocused(false);
+  const handleFocus1 = () => setIsFocused1(true);
+  const handleBlur1 = () => setIsFocused1(false);
   const handleFocus2 = () => setIsFocused2(true);
   const handleBlur2 = () => setIsFocused2(false);
   const handleFocus3 = () => setIsFocused3(true);
@@ -58,6 +65,7 @@ export default function Cadastro() {
       nascimento: dia + "/" + mes + "/" + ano,
       password: password,
       idFamilia: idFamilia,
+      parentesco: membro,
     };
 
     Axios.post("http://192.168.100.6:3001/procuraIdFamilia", dados)
@@ -187,11 +195,11 @@ export default function Cadastro() {
               }}
             ></TextInput>
           </View>
-          <View style={[styles.textInput, { borderColor: isFocused ? '#00f' : '#ccc' }]}>
+          <View style={[styles.textInput, { borderColor: isFocused1 ? '#00f' : '#ccc' }]}>
             <TextInput
               placeholder="Nome"
-              onFocus={handleFocus}
-              onBlur={handleBlur}
+              onFocus={handleFocus1}
+              onBlur={handleBlur1}
               onChangeText={(text) => setNome(text)}
               style={{
                 width: '96%',
@@ -291,6 +299,22 @@ export default function Cadastro() {
               secureTextEntry={true}
               onChangeText={(text) => setPassword1(text)}
             ></TextInput>
+          </View>
+          <View style={[styles.textInput, { borderColor: isFocused5 ? '#00f' : '#ccc' }]}>
+            {/* <Text>Selecione o membro da família:</Text> */}
+            <Picker
+              selectedValue={membro}
+              onValueChange={(valor) => setMembro(valor)}
+            
+              style={{ height: 50, width: 200, marginTop: -3 }}
+            >
+              <Picker.Item label="Parentesco" value="" />
+              <Picker.Item label="Mãe" value="mae" />
+              <Picker.Item label="Pai" value="pai" />
+              <Picker.Item label="Filho" value="filho" />
+            </Picker>
+
+            {/* {membro ? <Text>Membro selecionado: {membro}</Text> : null} */}
           </View>
 
           <TouchableOpacity
